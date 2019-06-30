@@ -1,6 +1,11 @@
 require "alpaca/trade/api/version"
 require "alpaca/trade/api/configuration"
 
+require "alpaca/trade/api/asset"
+require "alpaca/trade/api/client"
+
+require 'json'
+
 module Alpaca
   module Trade
     module Api
