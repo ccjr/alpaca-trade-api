@@ -1,5 +1,4 @@
 require 'faraday'
-# require 'uri'
 
 module Alpaca
   module Trade
@@ -18,14 +17,12 @@ module Alpaca
 
         def account()
           response = get_request("v2/account")
-          # TODO: handle errors
-          Alpaca::Trade::Api::Account.new(JSON.parse(response.body))
+          Account.new(JSON.parse(response.body))
         end
 
         def asset(symbol:)
           response = get_request("v2/assets/#{symbol}")
-          # TODO: handle errors
-          Alpaca::Trade::Api::Asset.new(JSON.parse(response.body))
+          Asset.new(JSON.parse(response.body))
         end
 
         private
@@ -36,6 +33,10 @@ module Alpaca
             req.headers['APCA-API-KEY-ID'] = key_id
             req.headers['APCA-API-SECRET-KEY'] = key_secret
           end
+
+          raise UnauthorizedError, JSON.parse(response.body)['message'] if response.status == 401
+
+          response
         end
       end
 
