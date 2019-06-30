@@ -1,8 +1,14 @@
 require "bundler/setup"
+
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec'
+  minimum_coverage 100
+end
+
 require "alpaca/trade/api"
 
 require 'vcr'
-
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
