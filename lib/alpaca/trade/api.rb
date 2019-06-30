@@ -10,7 +10,6 @@ module Alpaca
   module Trade
     module Api
       class Error < StandardError; end
-      # Your code goes here...
 
       class << self
         def configuration

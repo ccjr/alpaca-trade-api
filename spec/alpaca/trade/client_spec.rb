@@ -13,4 +13,12 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(client.key_secret).to eq('c')
     end
   end
+
+  describe '#asset' do
+    it 'returns an Asset object', :vcr do
+      asset = subject.asset(symbol: 'CRM')
+      expect(asset.asset_class).to eq('us_equity')
+      expect(asset.tradable).to be_truthy
+    end
+  end
 end
