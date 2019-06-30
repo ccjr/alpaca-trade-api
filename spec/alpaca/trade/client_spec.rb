@@ -14,6 +14,15 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
+  describe '#account' do
+    it 'returns an Account object', :vcr do
+      account = subject.account
+      expect(account.status).to eq('ACTIVE')
+      expect(account.currency).to eq('USD')
+      expect(account.pattern_day_trader).to be_falsy
+    end
+  end
+
   describe '#asset' do
     it 'returns an Asset object', :vcr do
       asset = subject.asset(symbol: 'CRM')

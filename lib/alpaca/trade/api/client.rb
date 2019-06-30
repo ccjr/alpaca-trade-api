@@ -16,15 +16,26 @@ module Alpaca
           @key_secret = key_secret
         end
 
+        def account()
+          response = get_request("v2/account")
+          # TODO: handle errors
+          Alpaca::Trade::Api::Account.new(JSON.parse(response.body))
+        end
+
         def asset(symbol:)
+          response = get_request("v2/assets/#{symbol}")
+          # TODO: handle errors
+          Alpaca::Trade::Api::Asset.new(JSON.parse(response.body))
+        end
+
+        private
+
+        def get_request(uri)
           conn = Faraday.new(:url => endpoint)
-          response = conn.get("v2/assets/#{symbol}") do |req|
+          response = conn.get(uri) do |req|
             req.headers['APCA-API-KEY-ID'] = key_id
             req.headers['APCA-API-SECRET-KEY'] = key_secret
           end
-
-          # TODO: handle errors
-          Alpaca::Trade::Api::Asset.new(JSON.parse(response.body))
         end
       end
 
