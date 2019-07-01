@@ -16,6 +16,7 @@ RSpec.describe Alpaca::Trade::Api do
       expect(ENV).to receive(:[]).with('ALPACA_API_KEY_ID').and_return(key_id).twice
       expect(ENV).to receive(:[]).with('ALPACA_API_SECRET_KEY').and_return(key_secret).twice
 
+      expect(Alpaca::Trade::Api.configuration.data_endpoint).to eq('https://data.alpaca.markets')
       expect(Alpaca::Trade::Api.configuration.endpoint).to eq('https://paper-api.alpaca.markets')
       expect(Alpaca::Trade::Api.configuration.key_id).to eq(key_id)
       expect(Alpaca::Trade::Api.configuration.key_secret).to eq(key_secret)
