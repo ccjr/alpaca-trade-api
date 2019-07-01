@@ -1,8 +1,6 @@
 # Alpaca::Trade::Api
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/alpaca/trade/api`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a high-level Ruby wrapper for [Alpaca trading API](https://docs.alpaca.markets/api-documentation/). This implementation *only* supports the Web API v2 API, there is no plan to support Web API v1.
 
 ## Installation
 
@@ -22,6 +20,28 @@ Or install it yourself as:
 
 ## Usage
 
+### Configuration
+
+By default, the library is configured to use the Paper Trading host - `https://paper-api.alpaca.markets` - as the endpoint it connects to, and loads both the key id and secret key from the following environment variables: `ALPACA_API_KEY_ID` and `ALPACA_API_SECRET_KEY`. To configure the library differently:
+
+```ruby
+Alpaca::Trade::Api.configure do |config|
+  config.endpoint = 'https://api.alapca.markets'
+  config.key_id = 'A_KEY_ID'
+  config.key_secret = 'A_S3CRET'
+end
+```
+
+### Account
+
+TODO: Write usage instructions here
+
+### Asset
+
+TODO: Write usage instructions here
+
+### Trading
+
 TODO: Write usage instructions here
 
 ## Development
@@ -32,7 +52,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/alpaca-trade-api.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ccjr/alpaca-trade-api.
 
 ## License
 
