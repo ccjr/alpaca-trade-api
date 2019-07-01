@@ -35,6 +35,7 @@ module Alpaca
           end
 
           raise UnauthorizedError, JSON.parse(response.body)['message'] if response.status == 401
+          raise RateLimitedError, JSON.parse(response.body)['message'] if response.status == 429
 
           response
         end
