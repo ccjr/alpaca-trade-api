@@ -21,6 +21,11 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(account.currency).to eq('USD')
       expect(account.pattern_day_trader).to be_falsy
     end
+
+    it 'raise UnauthorizedError when status code is 401', :vcr do
+      subject = described_class.new(key_secret: 'wrong')
+      expect { subject.account }.to raise_error(Alpaca::Trade::Api::UnauthorizedError)
+    end
   end
 
   describe '#asset' do
