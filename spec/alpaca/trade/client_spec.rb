@@ -35,4 +35,22 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(asset.tradable).to be_truthy
     end
   end
+
+  describe '#bars' do
+    it 'returns Bar objects for one symbol', :vcr do
+      bars = subject.bars('1D', ['CRM'])
+      expect(bars['CRM']).to be_an(Array)
+
+      bar = bars['CRM'].first
+      expect(bar).to be_an(Alpaca::Trade::Api::Bar)
+    end
+
+    it 'returns Bar objects for multiple symbols', :vcr do
+      bars = subject.bars('1D', ['CRM','FB','AMZN'])
+      expect(bars['FB']).to be_an(Array)
+
+      bar = bars['AMZN'].first
+      expect(bar).to be_an(Alpaca::Trade::Api::Bar)
+    end
+  end
 end

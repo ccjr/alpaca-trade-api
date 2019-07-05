@@ -3,6 +3,7 @@ require "alpaca/trade/api/configuration"
 
 require "alpaca/trade/api/account"
 require "alpaca/trade/api/asset"
+require "alpaca/trade/api/bar"
 require "alpaca/trade/api/client"
 require "alpaca/trade/api/errors"
 

@@ -7,6 +7,7 @@ SimpleCov.start do
 end
 
 require "alpaca/trade/api"
+require 'byebug'
 
 require 'vcr'
 VCR.configure do |c|
