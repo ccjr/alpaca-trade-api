@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'faraday'
 
 module Alpaca
   module Trade
     module Api
-
       class Client
         attr_reader :data_endpoint, :endpoint, :key_id, :key_secret
 
@@ -16,8 +17,8 @@ module Alpaca
           @key_secret = key_secret
         end
 
-        def account()
-          response = get_request(endpoint, "v2/account")
+        def account
+          response = get_request(endpoint, 'v2/account')
           Account.new(JSON.parse(response.body))
         end
 
@@ -29,18 +30,17 @@ module Alpaca
         def bars(timeframe, symbols)
           response = get_request(data_endpoint, "v1/bars/#{timeframe}", symbols: symbols.join(','))
           json = JSON.parse(response.body)
-          json.keys.inject({}) do |hash, symbol|
+          json.keys.each_with_object({}) do |symbol, hash|
             hash[symbol] = json[symbol].map { |bar| Bar.new(bar) }
-            hash
           end
         end
 
         private
 
-        def get_request(endpoint, uri, params={})
-          conn = Faraday.new(:url => endpoint)
+        def get_request(endpoint, uri, params = {})
+          conn = Faraday.new(url: endpoint)
           response = conn.get(uri) do |req|
-            params.each { |k,v| req.params[k.to_s] = v }
+            params.each { |k, v| req.params[k.to_s] = v }
             req.headers['APCA-API-KEY-ID'] = key_id
             req.headers['APCA-API-SECRET-KEY'] = key_secret
           end
@@ -51,7 +51,6 @@ module Alpaca
           response
         end
       end
-
     end
   end
 end

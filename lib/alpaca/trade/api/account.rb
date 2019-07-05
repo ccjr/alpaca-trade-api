@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 module Alpaca
   module Trade
     module Api
-
       class Account
         attr_reader :id, :status, :currency, :buying_power, :cash, :portfolio_value,
-          :pattern_day_trader, :trade_suspended_by_user, :trading_blocked,
-          :transfers_blocked, :account_blocked, :created_at, :shorting_enabled,
-          :multiplier, :long_market_value, :short_market_value, :equity,
-          :last_equity, :initial_margin, :maintenance_margin, :daytrade_count,
-          :sma
+                    :pattern_day_trader, :trade_suspended_by_user, :trading_blocked,
+                    :transfers_blocked, :account_blocked, :created_at, :shorting_enabled,
+                    :multiplier, :long_market_value, :short_market_value, :equity,
+                    :last_equity, :initial_margin, :maintenance_margin, :daytrade_count,
+                    :sma
 
         def initialize(json)
           @id = json['id']
@@ -34,7 +35,6 @@ module Alpaca
           @sma = json['sma']
         end
       end
-
     end
   end
 end

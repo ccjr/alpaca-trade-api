@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module Alpaca
   module Trade
     module Api
-
       class Bar
         attr_reader :time, :open, :high, :low, :close, :volume
 
@@ -14,7 +15,6 @@ module Alpaca
           @volume = json['v']
         end
       end
-
     end
   end
 end

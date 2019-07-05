@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module Alpaca
   module Trade
     module Api
-
       class Configuration
         attr_accessor :endpoint, :key_id, :key_secret
         attr_reader :data_endpoint
@@ -13,7 +14,6 @@ module Alpaca
           @key_secret = ENV['ALPACA_API_SECRET_KEY']
         end
       end
-
     end
   end
 end

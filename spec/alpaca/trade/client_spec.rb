@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Alpaca::Trade::Api::Client do
   describe '.initialize' do
     it 'defaults to configuration' do
@@ -46,7 +48,7 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
 
     it 'returns Bar objects for multiple symbols', :vcr do
-      bars = subject.bars('1D', ['CRM','FB','AMZN'])
+      bars = subject.bars('1D', %w[CRM FB AMZN])
       expect(bars['FB']).to be_an(Array)
 
       bar = bars['AMZN'].first

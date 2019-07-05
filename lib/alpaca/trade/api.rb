@@ -1,11 +1,13 @@
-require "alpaca/trade/api/version"
-require "alpaca/trade/api/configuration"
+# frozen_string_literal: true
 
-require "alpaca/trade/api/account"
-require "alpaca/trade/api/asset"
-require "alpaca/trade/api/bar"
-require "alpaca/trade/api/client"
-require "alpaca/trade/api/errors"
+require 'alpaca/trade/api/version'
+require 'alpaca/trade/api/configuration'
+
+require 'alpaca/trade/api/account'
+require 'alpaca/trade/api/asset'
+require 'alpaca/trade/api/bar'
+require 'alpaca/trade/api/client'
+require 'alpaca/trade/api/errors'
 
 require 'json'
 
@@ -25,7 +27,6 @@ module Alpaca
           @configuration = Alpaca::Trade::Api::Configuration.new
         end
       end
-
     end
   end
 end
