@@ -15,6 +15,10 @@ module Alpaca
   module Trade
     module Api
       class << self
+        def account
+          Client.new.account
+        end
+
         def configuration
           @configuration ||= Alpaca::Trade::Api::Configuration.new
         end

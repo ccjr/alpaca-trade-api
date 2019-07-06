@@ -15,9 +15,9 @@ module Alpaca
           @id = json['id']
           @status = json['status']
           @currency = json['currency']
-          @buying_power = json['buying_power']
-          @cash = json['cash']
-          @portfolio_value = json['portfolio_value']
+          @buying_power = BigDecimal(json['buying_power'])
+          @cash = BigDecimal(json['cash'])
+          @portfolio_value = BigDecimal(json['portfolio_value'])
           @pattern_day_trader = json['pattern_day_trader']
           @trade_suspended_by_user = json['trade_suspended_by_user']
           @trading_blocked = json['trading_blocked']
@@ -25,12 +25,12 @@ module Alpaca
           @created_at = json['created_at']
           @shorting_enabled = json['shorting_enabled']
           @multiplier = json['multiplier']
-          @long_market_value = json['long_market_value']
-          @short_market_value = json['short_market_value']
-          @equity = json['equity']
-          @last_equity = json['last_equity']
-          @initial_margin = json['initial_margin']
-          @maintenance_margin = json['maintenance_margin']
+          @long_market_value = BigDecimal(json['long_market_value'])
+          @short_market_value = BigDecimal(json['short_market_value'])
+          @equity = BigDecimal(json['equity'])
+          @last_equity = BigDecimal(json['last_equity'])
+          @initial_margin = BigDecimal(json['initial_margin'])
+          @maintenance_margin = BigDecimal(json['maintenance_margin'])
           @daytrade_count = json['daytrade_count']
           @sma = json['sma']
         end

@@ -8,10 +8,10 @@ module Alpaca
 
         def initialize(json)
           @time = Time.at(json['t'])
-          @open = json['o']
-          @high = json['h']
-          @low = json['l']
-          @close = json['c']
+          @open = BigDecimal(json['o'], 2)
+          @high = BigDecimal(json['h'], 2)
+          @low = BigDecimal(json['l'], 2)
+          @close = BigDecimal(json['c'], 2)
           @volume = json['v']
         end
       end
