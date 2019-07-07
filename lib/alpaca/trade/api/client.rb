@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'date'
 require 'faraday'
 
 module Alpaca
@@ -33,6 +34,13 @@ module Alpaca
           json.keys.each_with_object({}) do |symbol, hash|
             hash[symbol] = json[symbol].map { |bar| Bar.new(bar) }
           end
+        end
+
+        def calendar(start_date: Date.today, end_date: (Date.today + 30))
+          params = { "start" => start_date.iso8601, "end" => end_date.iso8601 }
+          response = get_request(endpoint, "v2/calendar", params)
+          json = JSON.parse(response.body)
+          json.map { |calendar| Calendar.new(calendar) }
         end
 
         private

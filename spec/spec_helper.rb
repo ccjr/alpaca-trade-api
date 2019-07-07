@@ -25,7 +25,8 @@ VCR.configure do |c|
   end
   c.filter_sensitive_data('<ID>') do |interaction|
     if interaction.response.status.code == 200
-      JSON.parse(interaction.response.body)['id']
+      json = JSON.parse(interaction.response.body)
+      json['id'] if json.is_a?(Hash)
     end
   end
 end

@@ -55,4 +55,13 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(bar).to be_an(Alpaca::Trade::Api::Bar)
     end
   end
+
+  describe '#calendar' do
+    it 'returns Calendar objects', :vcr do
+      market_calendar = subject.calendar(start_date: Date.new(2019,6,1), end_date: Date.new(2019,7,1))
+      expect(market_calendar).to be_an(Array)
+      expect(market_calendar.size).to eq(21)
+      expect(market_calendar.first).to be_an(Alpaca::Trade::Api::Calendar)
+    end
+  end
 end
