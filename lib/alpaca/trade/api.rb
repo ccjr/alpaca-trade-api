@@ -7,6 +7,7 @@ require 'alpaca/trade/api/account'
 require 'alpaca/trade/api/asset'
 require 'alpaca/trade/api/bar'
 require 'alpaca/trade/api/calendar'
+require 'alpaca/trade/api/clock'
 
 require 'alpaca/trade/api/client'
 require 'alpaca/trade/api/errors'

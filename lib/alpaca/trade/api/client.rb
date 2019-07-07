@@ -43,6 +43,11 @@ module Alpaca
           json.map { |calendar| Calendar.new(calendar) }
         end
 
+        def clock
+          response = get_request(endpoint, 'v2/clock')
+          Clock.new(JSON.parse(response.body))
+        end
+
         private
 
         def get_request(endpoint, uri, params = {})

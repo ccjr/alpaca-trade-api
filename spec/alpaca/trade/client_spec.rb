@@ -38,6 +38,10 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
+  describe '#assets' do
+    it 'returns an Array of Asset objects'
+  end
+
   describe '#bars' do
     it 'returns Bar objects for one symbol', :vcr do
       bars = subject.bars('1D', ['CRM'])
@@ -63,5 +67,24 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(market_calendar.size).to eq(21)
       expect(market_calendar.first).to be_an(Alpaca::Trade::Api::Calendar)
     end
+  end
+
+  describe '#clock' do
+    it 'returns the market clock', :vcr do
+      clock = subject.clock
+      expect(clock).to be_an(Alpaca::Trade::Api::Clock)
+    end
+  end
+
+  describe '#order' do
+    it 'returns an Order object'
+  end
+
+  describe '#orders' do
+    it 'returns an Array of Order objects'
+  end
+
+  describe '#positions' do
+    it 'returns an Array of Position objects'
   end
 end
