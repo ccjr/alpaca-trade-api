@@ -69,6 +69,18 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
+  describe '#cancel_order' do
+    it 'cancels an existing order'
+    it 'raises an exception when order id is invalid'
+    it 'raises an exception when order is not cancelable'
+  end
+
+  describe '#create_order' do
+    it 'places a new Order'
+    it 'raises an exception when buying power is not sufficient'
+    it 'raises an exception when required parameters are not provided'
+  end
+
   describe '#clock' do
     it 'returns the market clock', :vcr do
       clock = subject.clock
@@ -78,13 +90,19 @@ RSpec.describe Alpaca::Trade::Api::Client do
 
   describe '#order' do
     it 'returns an Order object'
+    it 'raises an exception when order id is invalid'
   end
 
   describe '#orders' do
     it 'returns an Array of Order objects'
   end
 
+  describe '#position' do
+    it 'returns a Position object'
+  end
+
   describe '#positions' do
-    it 'returns an Array of Position objects'
+    it 'returns an Array of Position objects with open positions'
+    it 'returns an Array of Position objects with open positions for symbol'
   end
 end
