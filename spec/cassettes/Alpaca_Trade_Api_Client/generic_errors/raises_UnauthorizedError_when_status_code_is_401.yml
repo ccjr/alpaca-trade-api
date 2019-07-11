@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.13.0
       Date:
-      - Thu, 11 Jul 2019 01:56:38 GMT
+      - Thu, 11 Jul 2019 02:24:33 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
@@ -37,5 +37,5 @@ http_interactions:
       string: '{"code":40110000,"message":"access key verification failed : verification
         failure"}'
     http_version: 
-  recorded_at: Thu, 11 Jul 2019 01:56:38 GMT
+  recorded_at: Thu, 11 Jul 2019 02:24:33 GMT
 recorded_with: VCR 5.0.0

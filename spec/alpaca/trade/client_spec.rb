@@ -16,14 +16,7 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
-  describe '#account' do
-    it 'returns an Account object', :vcr do
-      account = subject.account
-      expect(account.status).to eq('ACTIVE')
-      expect(account.currency).to eq('USD')
-      expect(account.pattern_day_trader).to be_falsy
-    end
-
+  context 'generic errors' do
     it 'raises UnauthorizedError when status code is 401', :vcr do
       subject = described_class.new(key_secret: 'wrong')
       expect { subject.account }.to raise_error(Alpaca::Trade::Api::UnauthorizedError)
@@ -37,6 +30,15 @@ RSpec.describe Alpaca::Trade::Api::Client do
     it 'raises InternalServerError when status code is 500', :vcr do
       expect_any_instance_of(Faraday::Response).to receive(:status).at_least(:once).and_return(500)
       expect { subject.account }.to raise_error(Alpaca::Trade::Api::InternalServerError)
+    end
+  end
+
+  describe '#account' do
+    it 'returns an Account object', :vcr do
+      account = subject.account
+      expect(account.status).to eq('ACTIVE')
+      expect(account.currency).to eq('USD')
+      expect(account.pattern_day_trader).to be_falsy
     end
   end
 

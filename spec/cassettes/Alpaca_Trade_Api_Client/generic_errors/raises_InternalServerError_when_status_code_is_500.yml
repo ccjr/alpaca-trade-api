@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - nginx/1.13.0
       Date:
-      - Thu, 11 Jul 2019 02:14:52 GMT
+      - Thu, 11 Jul 2019 02:24:35 GMT
       Content-Type:
       - application/json; charset=UTF-8
       Content-Length:
@@ -36,5 +36,5 @@ http_interactions:
       encoding: UTF-8
       string: '{"id":"<ID>","status":"ACTIVE","currency":"USD","buying_power":"391077.2","regt_buying_power":"186431","daytrading_buying_power":"391077.2","cash":"123664","portfolio_value":"103365","pattern_day_trader":false,"trading_blocked":false,"transfers_blocked":false,"account_blocked":false,"created_at":"2019-06-17T01:32:09.887277Z","trade_suspended_by_user":false,"multiplier":"4","shorting_enabled":true,"equity":"103365","last_equity":"103745","long_market_value":"0","short_market_value":"-20299","initial_margin":"10149.5","maintenance_margin":"6089.7","last_maintenance_margin":"5975.7","sma":"0","daytrade_count":1}'
     http_version: 
-  recorded_at: Thu, 11 Jul 2019 02:14:52 GMT
+  recorded_at: Thu, 11 Jul 2019 02:24:35 GMT
 recorded_with: VCR 5.0.0
