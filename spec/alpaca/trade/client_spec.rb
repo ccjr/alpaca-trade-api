@@ -24,10 +24,13 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(account.pattern_day_trader).to be_falsy
     end
 
-    it 'raise UnauthorizedError when status code is 401', :vcr do
+    it 'raises UnauthorizedError when status code is 401', :vcr do
       subject = described_class.new(key_secret: 'wrong')
       expect { subject.account }.to raise_error(Alpaca::Trade::Api::UnauthorizedError)
     end
+
+    it 'raises RateLimitedError when status code is 429'
+    it 'raises InternalServerError when status code is 500'
   end
 
   describe '#asset' do
@@ -85,10 +88,39 @@ RSpec.describe Alpaca::Trade::Api::Client do
     it 'raises an exception when order is not cancelable'
   end
 
-  describe '#create_order' do
-    it 'places a new Order'
-    it 'raises an exception when buying power is not sufficient'
-    it 'raises an exception when required parameters are not provided'
+  describe '#new_order' do
+    it 'places a new Order', :vcr do
+      order = subject.new_order(symbol: 'AAPL',
+                                qty: 5,
+                                side: 'buy',
+                                type: 'limit',
+                                time_in_force: 'day',
+                                limit_price: 200,
+                                extended_hours: true,
+                                client_order_id: 'MY_ORDER_ID')
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.id).to_not be_nil
+    end
+
+    it 'raises an exception when buying power is not sufficient', :vcr do
+      expect { subject.new_order(symbol: 'AAPL',
+                                 qty: 5_000,
+                                 side: 'buy',
+                                 type: 'limit',
+                                 time_in_force: 'day',
+                                 limit_price: 200,
+                                 extended_hours: true) }.to raise_error(Alpaca::Trade::Api::InsufficientFunds)
+    end
+
+    it 'raises an exception when required parameters are not provided', :vcr do
+      expect { subject.new_order(symbol: 'AAPL',
+                                 qty: 5,
+                                 side: 'buy',
+                                 type: 'limit',
+                                 time_in_force: 'day',
+                                 extended_hours: true,
+                                 client_order_id: 'MY_ORDER_ID_2') }.to raise_error(Alpaca::Trade::Api::MissingParameters)
+    end
   end
 
   describe '#clock' do
@@ -99,20 +131,44 @@ RSpec.describe Alpaca::Trade::Api::Client do
   end
 
   describe '#order' do
-    it 'returns an Order object'
-    it 'raises an exception when order id is invalid'
+    let(:invalid_id) { '001c0b29-5bc9-45c4-bd32-5ba323c997b3' }
+    let(:valid_id) { 'f08bfc92-c922-41f9-8166-3657e5bedef0' }
+
+    it 'returns an Order object', :vcr do
+      order = subject.order(id: valid_id)
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+    end
+
+    it 'raises an exception when order id is invalid', :vcr do
+      expect { subject.order(id: invalid_id) }.to raise_error(Alpaca::Trade::Api::InvalidOrderId)
+    end
   end
 
   describe '#orders' do
-    it 'returns an Array of Order objects'
+    it 'returns an Array of Order objects', :vcr do
+      orders = subject.orders(status: 'all', limit: 5)
+      expect(orders).to be_an(Array)
+      expect(orders.size).to eq(5)
+      expect(orders.first).to be_an(Alpaca::Trade::Api::Order)
+    end
   end
 
   describe '#position' do
-    it 'returns a Position object'
+    it 'returns a Position object', :vcr do
+      position = subject.position(symbol: 'FB')
+      expect(position).to be_an(Alpaca::Trade::Api::Position)
+    end
+
+    it 'raises an exception when position is not found for symbol', :vcr do
+      expect { subject.position(symbol: 'CRM') }.to raise_error(Alpaca::Trade::Api::NoPositionForSymbol)
+    end
   end
 
   describe '#positions' do
-    it 'returns an Array of Position objects with open positions'
-    it 'returns an Array of Position objects with open positions for symbol'
+    it 'returns an Array of Position objects with open positions', :vcr do
+      positions = subject.positions
+      expect(positions).to be_an(Array)
+      expect(positions.first).to be_an(Alpaca::Trade::Api::Position)
+    end
   end
 end

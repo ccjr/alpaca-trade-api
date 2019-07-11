@@ -4,6 +4,11 @@ module Alpaca
   module Trade
     module Api
       class Error < StandardError; end
+      class InsufficientFunds < Error; end
+      class InternalServerError < Error; end
+      class InvalidOrderId < Error; end
+      class MissingParameters < Error; end
+      class NoPositionForSymbol < Error; end
       class RateLimitedError < Error; end
       class UnauthorizedError < Error; end
     end

@@ -46,12 +46,64 @@ module Alpaca
           params = { "start" => start_date.iso8601, "end" => end_date.iso8601 }
           response = get_request(endpoint, "v2/calendar", params)
           json = JSON.parse(response.body)
-          json.map { |calendar| Calendar.new(calendar) }
+          json.map { |item| Calendar.new(item) }
+        end
+
+        def cancel_order
+
         end
 
         def clock
           response = get_request(endpoint, 'v2/clock')
           Clock.new(JSON.parse(response.body))
+        end
+
+        def new_order(symbol:, qty:, side:, type:, time_in_force:, limit_price: nil,
+          stop_price: nil, extended_hours:, client_order_id: nil)
+
+          params = {
+            symbol: symbol,
+            qty: qty,
+            side: side,
+            type: type,
+            time_in_force: time_in_force,
+            limit_price: limit_price,
+            stop_price: stop_price,
+            extended_hours: extended_hours,
+            client_order_id: client_order_id
+          }
+          response = post_request(endpoint, 'v2/orders', params.compact)
+          raise InsufficientFunds, JSON.parse(response.body)['message'] if response.status == 403
+          raise MissingParameters, JSON.parse(response.body)['message'] if response.status == 422
+
+          Order.new(JSON.parse(response.body))
+        end
+
+        def order(id:)
+          response = get_request(endpoint, "v2/orders/#{id}")
+          raise InvalidOrderId, JSON.parse(response.body)['message'] if response.status == 404
+
+          Order.new(JSON.parse(response.body))
+        end
+
+        def orders(status: nil, after: nil, until_time: nil, direction: nil, limit: 50)
+          params = { status: status, after: after, until: until_time, direction: direction, limit: limit }
+          response = get_request(endpoint, "v2/orders", params.compact)
+          json = JSON.parse(response.body)
+          json.map { |item| Order.new(item) }
+        end
+
+        def position(symbol: nil)
+          response = get_request(endpoint, ["v2/positions", symbol].compact.join('/'))
+          raise NoPositionForSymbol, JSON.parse(response.body)['message'] if response.status == 404
+
+          Position.new(JSON.parse(response.body))
+        end
+
+        def positions(symbol: nil)
+          response = get_request(endpoint, ["v2/positions", symbol].compact.join('/'))
+          json = JSON.parse(response.body)
+          json.map { |item| Position.new(item) }
         end
 
         private
@@ -64,10 +116,26 @@ module Alpaca
             req.headers['APCA-API-SECRET-KEY'] = key_secret
           end
 
+          possibly_raise_exception(response)
+          response
+        end
+
+        def post_request(endpoint, uri, params = {})
+          conn = Faraday.new(url: endpoint)
+          response = conn.post(uri) do |req|
+            req.body = params.to_json
+            req.headers['APCA-API-KEY-ID'] = key_id
+            req.headers['APCA-API-SECRET-KEY'] = key_secret
+          end
+
+          possibly_raise_exception(response)
+          response
+        end
+
+        def possibly_raise_exception(response)
           raise UnauthorizedError, JSON.parse(response.body)['message'] if response.status == 401
           raise RateLimitedError, JSON.parse(response.body)['message'] if response.status == 429
-
-          response
+          raise InternalServerError, JSON.parse(response.body)['message'] if response.status == 500
         end
       end
     end

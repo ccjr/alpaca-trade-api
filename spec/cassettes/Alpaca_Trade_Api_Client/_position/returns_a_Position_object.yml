@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://paper-api.alpaca.markets/v2/positions/FB
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Tue, 09 Jul 2019 16:52:16 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '437'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"asset_id":"fc6a5dcd-4a70-4b8d-b64f-d83a6dae9ba4","symbol":"FB","exchange":"NASDAQ","asset_class":"us_equity","qty":"-100","avg_entry_price":"198.4","side":"short","market_value":"-19922","cost_basis":"-19840","unrealized_pl":"-82","unrealized_plpc":"-0.004133064516129","unrealized_intraday_pl":"-82","unrealized_intraday_plpc":"-0.004133064516129","current_price":"199.22","lastday_price":"195.76","change_today":"0.0176747037188394"}'
+    http_version: 
+  recorded_at: Tue, 09 Jul 2019 16:52:16 GMT
+recorded_with: VCR 5.0.0

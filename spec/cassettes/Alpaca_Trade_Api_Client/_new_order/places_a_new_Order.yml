@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://paper-api.alpaca.markets/v2/orders
+    body:
+      encoding: UTF-8
+      string: '{"symbol":"AAPL","qty":5,"side":"buy","type":"limit","time_in_force":"day","limit_price":200,"extended_hours":true,"client_order_id":"MY_ORDER_ID"}'
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Tue, 09 Jul 2019 21:07:24 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '577'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"id":"<ID>","client_order_id":"MY_ORDER_ID","created_at":"2019-07-09T21:07:24.662832238Z","updated_at":"2019-07-09T21:07:24.668883431Z","submitted_at":"2019-07-09T21:07:24.643912893Z","filled_at":null,"expired_at":null,"canceled_at":null,"failed_at":null,"asset_id":"b0b6dd9d-8b9b-48a9-ba46-b9d54906e415","symbol":"AAPL","asset_class":"us_equity","qty":"5","filled_qty":"0","filled_avg_price":null,"order_type":"limit","type":"limit","side":"buy","time_in_force":"day","limit_price":"200","stop_price":null,"status":"new","extended_hours":true}'
+    http_version: 
+  recorded_at: Tue, 09 Jul 2019 21:07:24 GMT
+recorded_with: VCR 5.0.0

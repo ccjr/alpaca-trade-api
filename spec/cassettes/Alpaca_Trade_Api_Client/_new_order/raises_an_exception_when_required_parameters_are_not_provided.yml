@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://paper-api.alpaca.markets/v2/orders
+    body:
+      encoding: UTF-8
+      string: '{"symbol":"AAPL","qty":5,"side":"buy","type":"limit","time_in_force":"day","extended_hours":true,"client_order_id":"MY_ORDER_ID_2"}'
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Entity
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Thu, 11 Jul 2019 01:58:30 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '67'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"code":40010001,"message":"limit orders require only limit price"}'
+    http_version: 
+  recorded_at: Thu, 11 Jul 2019 01:58:30 GMT
+recorded_with: VCR 5.0.0

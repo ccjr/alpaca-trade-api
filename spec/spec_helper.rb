@@ -24,7 +24,8 @@ VCR.configure do |c|
     interaction.request.headers['Apca-Api-Secret-Key'].first
   end
   c.filter_sensitive_data('<ID>') do |interaction|
-    if interaction.response.status.code == 200
+    # need to avoid replace Ids in URLs
+    if interaction.response.status.code == 200 && !interaction.request.uri.include?('/v2/orders/')
       json = JSON.parse(interaction.response.body)
       json['id'] if json.is_a?(Hash)
     end
