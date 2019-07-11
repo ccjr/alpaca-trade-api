@@ -133,9 +133,15 @@ module Alpaca
         end
 
         def possibly_raise_exception(response)
-          raise UnauthorizedError, JSON.parse(response.body)['message'] if response.status == 401
-          raise RateLimitedError, JSON.parse(response.body)['message'] if response.status == 429
-          raise InternalServerError, JSON.parse(response.body)['message'] if response.status == 500
+          if response.status == 401
+            raise UnauthorizedError, JSON.parse(response.body)['message']
+          end
+          if response.status == 429
+            raise RateLimitedError, JSON.parse(response.body)['message']
+          end
+          if response.status == 500
+            raise InternalServerError, JSON.parse(response.body)['message']
+          end
         end
       end
     end

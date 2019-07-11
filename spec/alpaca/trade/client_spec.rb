@@ -29,8 +29,15 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect { subject.account }.to raise_error(Alpaca::Trade::Api::UnauthorizedError)
     end
 
-    it 'raises RateLimitedError when status code is 429'
-    it 'raises InternalServerError when status code is 500'
+    it 'raises RateLimitedError when status code is 429', :vcr do
+      expect_any_instance_of(Faraday::Response).to receive(:status).at_least(:once).and_return(429)
+      expect { subject.account }.to raise_error(Alpaca::Trade::Api::RateLimitedError)
+    end
+
+    it 'raises InternalServerError when status code is 500', :vcr do
+      expect_any_instance_of(Faraday::Response).to receive(:status).at_least(:once).and_return(500)
+      expect { subject.account }.to raise_error(Alpaca::Trade::Api::InternalServerError)
+    end
   end
 
   describe '#asset' do
