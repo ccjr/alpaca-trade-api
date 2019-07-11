@@ -28,6 +28,12 @@ module Alpaca
           Asset.new(JSON.parse(response.body))
         end
 
+        def assets(status: nil, asset_class: nil)
+          response = get_request(endpoint, "v2/assets", { status: status, asset_class: asset_class }.compact)
+          json = JSON.parse(response.body)
+          json.map { |item| Asset.new(item) }
+        end
+
         def bars(timeframe, symbols)
           response = get_request(data_endpoint, "v1/bars/#{timeframe}", symbols: symbols.join(','))
           json = JSON.parse(response.body)

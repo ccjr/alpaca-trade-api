@@ -39,7 +39,17 @@ RSpec.describe Alpaca::Trade::Api::Client do
   end
 
   describe '#assets' do
-    it 'returns an Array of Asset objects'
+    it 'returns an Array of Asset objects', :vcr do
+      assets = subject.assets
+      expect(assets).to be_an(Array)
+      expect(assets.first).to be_an(Alpaca::Trade::Api::Asset)
+    end
+
+    it 'filters assets by status and asset_class', :vcr do
+      assets = subject.assets(status: 'active', asset_class: 'us_equity')
+      expect(assets).to be_an(Array)
+      expect(assets.first).to be_an(Alpaca::Trade::Api::Asset)
+    end
   end
 
   describe '#bars' do
