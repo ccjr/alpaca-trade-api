@@ -92,9 +92,17 @@ RSpec.describe Alpaca::Trade::Api::Client do
   end
 
   describe '#cancel_order' do
-    it 'cancels an existing order'
-    it 'raises an exception when order id is invalid'
-    it 'raises an exception when order is not cancelable'
+    let(:existing_order_id) { '1df53539-385c-4a5d-9c02-565352ac60b0' }
+    let(:order_id) { 'aefc84eb-247f-4782-a811-96f5ba1b72ff' }
+    let(:invalid_id) { '001c0b29-5bc9-45c4-bd32-5ba323c997b3' }
+
+    it 'cancels an existing order', :vcr do
+      expect { subject.cancel_order(id: existing_order_id) }.to_not raise_error
+    end
+
+    it 'raises an exception when order id is invalid', :vcr do
+      expect { subject.cancel_order(id: invalid_id) }.to raise_error(Alpaca::Trade::Api::InvalidOrderId)
+    end
   end
 
   describe '#new_order' do

@@ -9,6 +9,7 @@ module Alpaca
       class InvalidOrderId < Error; end
       class MissingParameters < Error; end
       class NoPositionForSymbol < Error; end
+      class OrderNotCancelable < Error; end
       class RateLimitedError < Error; end
       class UnauthorizedError < Error; end
     end

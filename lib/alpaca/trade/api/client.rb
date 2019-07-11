@@ -49,8 +49,10 @@ module Alpaca
           json.map { |item| Calendar.new(item) }
         end
 
-        def cancel_order
-
+        def cancel_order(id:)
+          response = delete_request(endpoint, "v2/orders/#{id}")
+          raise InvalidOrderId, JSON.parse(response.body)['message'] if response.status == 404
+          raise OrderNotCancelable if response.status == 422
         end
 
         def clock
@@ -107,6 +109,17 @@ module Alpaca
         end
 
         private
+
+        def delete_request(endpoint, uri)
+          conn = Faraday.new(url: endpoint)
+          response = conn.delete(uri) do |req|
+            req.headers['APCA-API-KEY-ID'] = key_id
+            req.headers['APCA-API-SECRET-KEY'] = key_secret
+          end
+
+          possibly_raise_exception(response)
+          response
+        end
 
         def get_request(endpoint, uri, params = {})
           conn = Faraday.new(url: endpoint)
