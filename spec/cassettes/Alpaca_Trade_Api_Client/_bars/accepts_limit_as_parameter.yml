@@ -1,0 +1,40 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://data.alpaca.markets/v1/bars/1D?limit=10&symbols=CRM
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Fri, 12 Jul 2019 03:08:10 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '740'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"CRM":[{"t":1561608000,"o":149.89,"h":150.76,"l":148.47,"c":150.67,"v":6338779},{"t":1561694400,"o":151.11,"h":151.77,"l":149.6,"c":151.53,"v":4664177},{"t":1561953600,"o":154.57,"h":154.74,"l":151.8503,"c":154.01,"v":5662224},{"t":1562040000,"o":154.29,"h":154.36,"l":152.58,"c":154.12,"v":4352992},{"t":1562126400,"o":154.54,"h":155.75,"l":154.16,"c":155.73,"v":3106378},{"t":1562299200,"o":153.95,"h":154.805,"l":152.57,"c":154.61,"v":3572534},{"t":1562558400,"o":153.52,"h":153.69,"l":152.044,"c":152.81,"v":3937622},{"t":1562644800,"o":152.08,"h":154.19,"l":151.68,"c":153.91,"v":4236667},{"t":1562731200,"o":154.57,"h":156.4,"l":154.57,"c":156.24,"v":4353955},{"t":1562817600,"o":156.82,"h":159.3,"l":156.62,"c":158.88,"v":6524677}]}'
+    http_version: 
+  recorded_at: Fri, 12 Jul 2019 03:08:11 GMT
+recorded_with: VCR 5.0.0

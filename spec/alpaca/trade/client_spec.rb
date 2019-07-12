@@ -80,6 +80,12 @@ RSpec.describe Alpaca::Trade::Api::Client do
       bar = bars['AMZN'].first
       expect(bar).to be_an(Alpaca::Trade::Api::Bar)
     end
+
+    it 'accepts limit as parameter', :vcr do
+      bars = subject.bars('1D', ['CRM'], limit: 10)
+      expect(bars['CRM']).to be_an(Array)
+      expect(bars['CRM'].size).to eq(10)
+    end
   end
 
   describe '#calendar' do
