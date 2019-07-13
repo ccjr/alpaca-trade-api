@@ -71,6 +71,7 @@ RSpec.describe Alpaca::Trade::Api::Client do
 
       bar = bars['CRM'].first
       expect(bar).to be_an(Alpaca::Trade::Api::Bar)
+      expect(bar.close).to eq(160.57)
     end
 
     it 'returns Bar objects for multiple symbols', :vcr do
