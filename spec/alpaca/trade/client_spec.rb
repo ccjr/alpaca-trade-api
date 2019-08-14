@@ -151,6 +151,7 @@ RSpec.describe Alpaca::Trade::Api::Client do
     it 'returns the market clock', :vcr do
       clock = subject.clock
       expect(clock).to be_an(Alpaca::Trade::Api::Clock)
+      expect(clock.is_open).to be_falsey
     end
   end
 
