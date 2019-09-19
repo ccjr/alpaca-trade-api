@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://paper-api.alpaca.markets/v2/orders/1c7490e3-a3fb-4f33-aa93-d0194e675bfa
+    body:
+      encoding: UTF-8
+      string: '{"qty":100000,"limit_price":30}'
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 403
+      message: Forbidden
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Thu, 19 Sep 2019 21:42:27 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '55'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"code":40310000,"message":"insufficient buying power"}'
+    http_version:
+  recorded_at: Thu, 19 Sep 2019 21:42:27 GMT
+recorded_with: VCR 5.0.0

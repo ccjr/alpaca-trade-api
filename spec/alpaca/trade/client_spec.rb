@@ -147,6 +147,46 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
+  describe '#replace_order' do
+    let(:canceled_order_id) { '7ab88b48-b57a-48bf-aa58-89496b23757d' }
+    let(:invalid_id) { '001c0b29-5bc9-45c4-bd32-5ba323c997b3' }
+    let(:valid_id) { '1c7490e3-a3fb-4f33-aa93-d0194e675bfa' }
+
+    it 'updates an Order', :vcr do
+      order = subject.replace_order(id: valid_id,
+                                    qty: 100,
+                                    limit_price: 25.25,
+                                    client_order_id: 'MY_ORDER_ID_3')
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.limit_price).to eq('25.25')
+      expect(order.status).to eq('new')
+    end
+
+    it 'raises an exception when order id is invalid', :vcr do
+      expect {
+        subject.replace_order(id: invalid_id,
+                              qty: 105,
+                              time_in_force: 'gtc',
+                              stop_price: 25.1)
+      }.to raise_error(Alpaca::Trade::Api::InvalidOrderId)
+    end
+
+    it 'raises an exception when buying power is not sufficient', :vcr do
+      expect {
+        subject.replace_order(id: valid_id,
+                              qty: 100_000,
+                              limit_price: 30)
+      }.to raise_error(Alpaca::Trade::Api::InsufficientFunds)
+    end
+
+    it 'raises an exception when trying to replace orders that are not open', :vcr do
+      expect {
+        subject.replace_order(id: canceled_order_id,
+                              qty: 200)
+      }.to raise_error(Alpaca::Trade::Api::InvalidRequest)
+    end
+  end
+
   describe '#clock' do
     it 'returns the market clock', :vcr do
       clock = subject.clock

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added limit as a parameter to Client#bars
 - Renamed Clock#open to Clock#is_open and fixed assignment.
+- Implemented Client#replace_order.
 
 ## [0.2.0] - 2019-07-10
 ### Added

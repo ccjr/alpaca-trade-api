@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: patch
+    uri: https://paper-api.alpaca.markets/v2/orders/7ab88b48-b57a-48bf-aa58-89496b23757d
+    body:
+      encoding: UTF-8
+      string: '{"qty":200}'
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 422
+      message: Unprocessable Entity
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Thu, 19 Sep 2019 21:00:42 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '62'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"code":40010001,"message":"only open orders can be replaced"}'
+    http_version: 
+  recorded_at: Thu, 19 Sep 2019 21:00:42 GMT
+recorded_with: VCR 5.0.0
