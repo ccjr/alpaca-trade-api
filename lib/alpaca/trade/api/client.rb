@@ -108,6 +108,24 @@ module Alpaca
           json.map { |item| Position.new(item) }
         end
 
+        def replace_order(id:, qty: nil, time_in_force: nil, limit_price: nil,
+                          stop_price: nil, client_order_id: nil)
+
+          params = {
+            qty: qty,
+            time_in_force: time_in_force,
+            limit_price: limit_price,
+            stop_price: stop_price,
+            client_order_id: client_order_id
+          }
+          response = patch_request(endpoint, "v2/orders/#{id}", params.compact)
+          raise InsufficientFunds, JSON.parse(response.body)['message'] if response.status == 403
+          raise InvalidOrderId, JSON.parse(response.body)['message'] if response.status == 404
+          raise InvalidRequest, JSON.parse(response.body)['message'] if response.status == 422
+
+          Order.new(JSON.parse(response.body))
+        end
+
         private
 
         def delete_request(endpoint, uri)
@@ -125,6 +143,18 @@ module Alpaca
           conn = Faraday.new(url: endpoint)
           response = conn.get(uri) do |req|
             params.each { |k, v| req.params[k.to_s] = v }
+            req.headers['APCA-API-KEY-ID'] = key_id
+            req.headers['APCA-API-SECRET-KEY'] = key_secret
+          end
+
+          possibly_raise_exception(response)
+          response
+        end
+
+        def patch_request(endpoint, uri, params = {})
+          conn = Faraday.new(url: endpoint)
+          response = conn.patch(uri) do |req|
+            req.body = params.to_json
             req.headers['APCA-API-KEY-ID'] = key_id
             req.headers['APCA-API-SECRET-KEY'] = key_secret
           end

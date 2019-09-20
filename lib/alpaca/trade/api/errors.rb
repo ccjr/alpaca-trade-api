@@ -7,6 +7,7 @@ module Alpaca
       class InsufficientFunds < Error; end
       class InternalServerError < Error; end
       class InvalidOrderId < Error; end
+      class InvalidRequest < Error; end
       class MissingParameters < Error; end
       class NoPositionForSymbol < Error; end
       class OrderNotCancelable < Error; end
