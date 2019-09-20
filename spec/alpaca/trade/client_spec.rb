@@ -112,6 +112,50 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
+  describe '#cancel_orders' do
+    let(:existing_order_id) { '9b36cef2-8f9d-4499-a599-77de3e482b6f' }
+
+    it 'cancels existing orders', :vcr do
+      cancelled_orders = subject.cancel_orders
+      expect(cancelled_orders).to be_an(Array)
+
+      order_response = cancelled_orders.last
+      expect(order_response['id']).to eq(existing_order_id)
+      expect(order_response['status']).to eq(200)
+      expect(order_response['body']).to be_an(Alpaca::Trade::Api::Order)
+    end
+
+    it 'returns an empty array when there are no orders', :vcr do
+      expect(subject.cancel_orders).to eq([])
+    end
+  end
+
+  describe '#close_position' do
+    it 'raises when there are no positions for symbol', :vcr do
+      expect { subject.close_position(symbol: 'CRM') }.to raise_error(Alpaca::Trade::Api::NoPositionForSymbol)
+    end
+
+    it 'closes an open position'
+  end
+
+  describe '#close_positions' do
+    let(:existing_position_symbol) { 'AIV' }
+
+    it 'closes all open positions', :vcr do
+      closed_positions = subject.close_positions
+      expect(closed_positions).to be_an(Array)
+
+      position_response = closed_positions.first
+      expect(position_response['symbol']).to eq(existing_position_symbol)
+      expect(position_response['status']).to eq(200)
+      expect(position_response['body']).to be_an(Alpaca::Trade::Api::Position)
+    end
+
+    it 'returns an empty array when there are no positions', :vcr do
+      expect(subject.close_positions).to eq([])
+    end
+  end
+
   describe '#new_order' do
     it 'places a new Order', :vcr do
       order = subject.new_order(symbol: 'AAPL',

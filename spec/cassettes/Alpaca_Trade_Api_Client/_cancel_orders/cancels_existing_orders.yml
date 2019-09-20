@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: delete
+    uri: https://paper-api.alpaca.markets/v2/orders
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 207
+      message: Multi-Status
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Thu, 19 Sep 2019 21:51:15 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '1440'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '[{"id":"d160ffe2-1fc6-4f0f-b1d8-59e121daa904","status":200,"body":{"id":"d160ffe2-1fc6-4f0f-b1d8-59e121daa904","client_order_id":"2019-09-19-127-AIV-sell-3befa54b","created_at":"2019-09-19T13:31:06.335955Z","updated_at":"2019-09-19T14:51:15.843513608Z","submitted_at":"2019-09-19T13:31:06.309306Z","filled_at":null,"expired_at":null,"canceled_at":null,"failed_at":null,"replaced_at":null,"replaced_by":null,"replaces":null,"asset_id":"6a5d1d05-d652-48a6-b33f-98991c0a442a","symbol":"AIV","asset_class":"us_equity","qty":"70","filled_qty":"0","filled_avg_price":null,"order_type":"limit","type":"limit","side":"sell","time_in_force":"gtc","limit_price":"52.66","stop_price":null,"status":"new","extended_hours":false}},{"id":"9b36cef2-8f9d-4499-a599-77de3e482b6f","status":200,"body":{"id":"9b36cef2-8f9d-4499-a599-77de3e482b6f","client_order_id":"a0aac2a4-c10e-4f6b-8347-39087ff84edc","created_at":"2019-09-19T14:50:58.234082Z","updated_at":"2019-09-19T14:51:15.849927018Z","submitted_at":"2019-09-19T14:50:58.20747Z","filled_at":null,"expired_at":null,"canceled_at":null,"failed_at":null,"replaced_at":null,"replaced_by":null,"replaces":null,"asset_id":"bb2a26c0-4c77-4801-8afc-82e8142ac7b8","symbol":"NFLX","asset_class":"us_equity","qty":"78","filled_qty":"0","filled_avg_price":null,"order_type":"limit","type":"limit","side":"sell","time_in_force":"gtc","limit_price":"296.16","stop_price":null,"status":"new","extended_hours":false}}]'
+    http_version:
+  recorded_at: Thu, 19 Sep 2019 21:51:15 GMT
+recorded_with: VCR 5.0.0

@@ -55,9 +55,42 @@ module Alpaca
           raise OrderNotCancelable if response.status == 422
         end
 
+        def cancel_orders
+          response = delete_request(endpoint, 'v2/orders')
+
+          json = JSON.parse(response.body)
+          json.map do |item|
+            {
+              'id' => item['id'],
+              'status' => item['status'],
+              'body' => Order.new(item['body']),
+            }
+          end
+        end
+
         def clock
           response = get_request(endpoint, 'v2/clock')
           Clock.new(JSON.parse(response.body))
+        end
+
+        def close_position(symbol:)
+          response = delete_request(endpoint, "v2/positions/#{symbol}")
+          raise NoPositionForSymbol, JSON.parse(response.body)['message'] if response.status == 404
+
+          Position.new(JSON.parse(response.body))
+        end
+
+        def close_positions
+          response = delete_request(endpoint, 'v2/positions')
+
+          json = JSON.parse(response.body)
+          json.map do |item|
+            {
+              'symbol' => item['symbol'],
+              'status' => item['status'],
+              'body' => Position.new(item['body']),
+            }
+          end
         end
 
         def new_order(symbol:, qty:, side:, type:, time_in_force:, limit_price: nil,
