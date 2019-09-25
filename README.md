@@ -26,7 +26,7 @@ By default, the library is configured to use the Paper Trading host - `https://p
 
 ```ruby
 Alpaca::Trade::Api.configure do |config|
-  config.endpoint = 'https://api.alapca.markets'
+  config.endpoint = 'https://api.alpaca.markets'
   config.key_id = 'A_KEY_ID'
   config.key_secret = 'A_S3CRET'
 end
