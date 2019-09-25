@@ -32,17 +32,30 @@ Alpaca::Trade::Api.configure do |config|
 end
 ```
 
-### Account
+### Supported endpoints
 
-TODO: Write usage instructions here
+Here's a table with all currently supported endpoints in this library:
 
-### Asset
-
-TODO: Write usage instructions here
-
-### Trading
-
-TODO: Write usage instructions here
+| Object | Action | Method |
+|------------------------------------------------------------------------------|---------------------------------------|--------------------------------|
+| [Account](https://docs.alpaca.markets/api-documentation/api-v2/account/)     | [GET] Get the account                 | Client#account                 |
+| [Orders](https://docs.alpaca.markets/api-documentation/api-v2/orders/)       | [GET] Get a list of orders            | Client#order                   |
+|                                                                              | [POST] Request a new order            | Client#new_order               |
+|                                                                              | [GET] Get an order                    | Client#order(id:)              |
+|                                                                              | [GET] Get an order by client order id | Client#order(id:)              |
+|                                                                              | [PATCH] Replace an order              | Client#replace_order           |
+|                                                                              | [DELETE] Cancel all orders            | Client#cancel_orders           |
+|                                                                              | [DELETE] Cancel an order              | Client#cancel_order(id:)       |
+| [Positions](https://docs.alpaca.markets/api-documentation/api-v2/positions/) | [GET] Get open positions              | Client#positions               |
+|                                                                              | [GET] Get an open position            | Client#position(symbol:)       |
+|                                                                              | [DELETE] Close all positions          | Client#close_positions         |
+|                                                                              | [DELETE] Close a position             | Client#close_position(symbol:) |
+| [Assets](https://docs.alpaca.markets/api-documentation/api-v2/assets/)       | [GET] Get assets                      | Client#assets                  |
+|                                                                              | [GET] Get assets/:id                  | Client#asset(symbol:)          |
+|                                                                              | [GET] Get an asset                    | Client#asset(symbol:)          |
+| [Calendar](https://docs.alpaca.markets/api-documentation/api-v2/calendar/)   | [GET] Get the calendar                | Client#calendar(start_date:, end_date:) |
+| [Clock](https://docs.alpaca.markets/api-documentation/api-v2/clock/)         | [GET] Get the clock                   | Client#clock                            |
+| [Bars](https://docs.alpaca.markets/api-documentation/api-v2/market-data/bars/) | [GET] Get a list of bars            | Client#bars(timeframe, symbols, limit:) |
 
 ## Development
 
