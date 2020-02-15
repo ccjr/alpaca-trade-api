@@ -32,6 +32,24 @@ Alpaca::Trade::Api.configure do |config|
 end
 ```
 
+
+### Example
+
+Here's an example on how to use the library to read details of an account's orders in paper trading.
+
+```ruby
+require 'alpaca/trade/api'
+
+Alpaca::Trade::Api.configure do |config|
+  config.endpoint = 'https://paper-api.alpaca.markets'
+  config.key_id = 'xxxxxxxx'
+  config.key_secret = 'xxxxx'
+end
+
+client =  Alpaca::Trade::Api::Client.new
+puts client.orders.last.inspect
+```
+
 ### Supported endpoints
 
 Here's a table with all currently supported endpoints in this library:
