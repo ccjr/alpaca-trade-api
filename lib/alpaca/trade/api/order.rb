@@ -7,7 +7,7 @@ module Alpaca
         attr_reader :id, :client_order_id, :created_at, :updated_at, :submitted_at,
           :filled_at, :expired_at, :canceled_at, :failed_at, :asset_id, :symbol,
           :asset_class, :qty, :filled_qty, :type, :side, :time_in_force, :limit_price,
-          :stop_price, :filled_avg_price, :status, :extended_hours
+          :stop_price, :filled_avg_price, :status, :extended_hours, :legs
 
         def initialize(json)
           @id = json['id']
@@ -32,6 +32,7 @@ module Alpaca
           @filled_avg_price = json['filled_avg_price']
           @status = json['status']
           @extended_hours = json['extended_hours']
+          @legs = (json['legs'] || []).map {|leg| Order.new(leg)}
         end
       end
     end

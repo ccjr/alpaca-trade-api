@@ -181,6 +181,22 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(order.id).to_not be_nil
     end
 
+    it 'supports bracket orders', :vcr do
+      order = subject.new_order(symbol: 'AAPL',
+                                qty: 5,
+                                side: 'buy',
+                                type: 'limit',
+                                order_class: 'bracket',
+                                time_in_force: 'day',
+                                limit_price: 325,
+                                take_profit: { limit_price: 335 },
+                                stop_loss: { stop_price: 315 },
+                                client_order_id: 'BRACKET_ORDER_ID')
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.legs).to be_an(Array)
+      order.legs.each { |leg| expect(leg).to be_an(Alpaca::Trade::Api::Order) }
+    end
+
     it 'raises an exception when buying power is not sufficient', :vcr do
       expect { subject.new_order(symbol: 'AAPL',
                                  qty: 5_000,

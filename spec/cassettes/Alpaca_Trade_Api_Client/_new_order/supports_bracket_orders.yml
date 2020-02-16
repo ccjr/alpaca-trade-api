@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://paper-api.alpaca.markets/v2/orders
+    body:
+      encoding: UTF-8
+      string: '{"symbol":"AAPL","qty":5,"side":"buy","type":"limit","time_in_force":"day","limit_price":325,"order_class":"bracket","take_profit":{"limit_price":335},"stop_loss":{"stop_price":315},"extended_hours":false,"client_order_id":"BRACKET_ORDER_ID"}'
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.13.0
+      Date:
+      - Sun, 16 Feb 2020 03:43:35 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '{"id":"<ID>","client_order_id":"BRACKET_ORDER_ID","created_at":"2020-02-16T03:43:35.050244Z","updated_at":"2020-02-16T03:43:35.058803Z","submitted_at":"2020-02-16T03:43:35.028697Z","filled_at":null,"expired_at":null,"canceled_at":null,"failed_at":null,"replaced_at":null,"replaced_by":null,"replaces":null,"asset_id":"b0b6dd9d-8b9b-48a9-ba46-b9d54906e415","symbol":"AAPL","asset_class":"us_equity","qty":"5","filled_qty":"0","filled_avg_price":null,"order_class":"bracket","order_type":"limit","type":"limit","side":"buy","time_in_force":"day","limit_price":"325","stop_price":null,"status":"accepted","extended_hours":false,"legs":[{"id":"4ca216c1-6450-484e-8e76-67f7c7e83419","client_order_id":"dbc3e226-c495-4f0e-9bbe-02a928a6e013","created_at":"2020-02-16T03:43:35.050244Z","updated_at":"2020-02-16T03:43:35.050244Z","submitted_at":"2020-02-16T03:43:35.028697Z","filled_at":null,"expired_at":null,"canceled_at":null,"failed_at":null,"replaced_at":null,"replaced_by":null,"replaces":null,"asset_id":"b0b6dd9d-8b9b-48a9-ba46-b9d54906e415","symbol":"AAPL","asset_class":"us_equity","qty":"5","filled_qty":"0","filled_avg_price":null,"order_class":"bracket","order_type":"limit","type":"limit","side":"sell","time_in_force":"day","limit_price":"335","stop_price":null,"status":"held","extended_hours":false,"legs":null},{"id":"d8532061-54d6-400f-8910-d20e2118ece4","client_order_id":"9e36c248-8f55-4be6-98a9-3672a8f56a3d","created_at":"2020-02-16T03:43:35.050244Z","updated_at":"2020-02-16T03:43:35.050244Z","submitted_at":"2020-02-16T03:43:35.028697Z","filled_at":null,"expired_at":null,"canceled_at":null,"failed_at":null,"replaced_at":null,"replaced_by":null,"replaces":null,"asset_id":"b0b6dd9d-8b9b-48a9-ba46-b9d54906e415","symbol":"AAPL","asset_class":"us_equity","qty":"5","filled_qty":"0","filled_avg_price":null,"order_class":"bracket","order_type":"stop","type":"stop","side":"sell","time_in_force":"day","limit_price":null,"stop_price":"315","status":"held","extended_hours":false,"legs":null}]}'
+    http_version: 
+  recorded_at: Sun, 16 Feb 2020 03:43:35 GMT
+recorded_with: VCR 5.0.0
