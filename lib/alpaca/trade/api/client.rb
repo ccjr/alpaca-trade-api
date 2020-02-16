@@ -46,6 +46,7 @@ module Alpaca
         end
 
         def calendar(start_date: Date.today, end_date: (Date.today + 30))
+          # FIX, use start_date.strftime('%F')
           params = { "start" => start_date.iso8601, "end" => end_date.iso8601 }
           response = get_request(endpoint, "v2/calendar", params)
           json = JSON.parse(response.body)
