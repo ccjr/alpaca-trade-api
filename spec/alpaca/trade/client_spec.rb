@@ -193,7 +193,9 @@ RSpec.describe Alpaca::Trade::Api::Client do
                                 stop_loss: { stop_price: 315 },
                                 client_order_id: 'BRACKET_ORDER_ID')
       expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.order_class).to eq('bracket')
       expect(order.legs).to be_an(Array)
+      expect(order.legs.size).to eq(2)
       order.legs.each { |leg| expect(leg).to be_an(Alpaca::Trade::Api::Order) }
     end
 
