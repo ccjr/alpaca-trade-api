@@ -97,7 +97,8 @@ module Alpaca
         end
 
         def new_order(symbol:, qty:, side:, type:, time_in_force:, limit_price: nil,
-          stop_price: nil, extended_hours: false, client_order_id: nil)
+          stop_price: nil, extended_hours: false, client_order_id: nil, order_class: nil,
+          take_profit: nil, stop_loss: nil)
 
           params = {
             symbol: symbol,
@@ -106,7 +107,10 @@ module Alpaca
             type: type,
             time_in_force: time_in_force,
             limit_price: limit_price,
+            order_class: order_class,
             stop_price: stop_price,
+            take_profit: take_profit,
+            stop_loss: stop_loss,
             extended_hours: extended_hours,
             client_order_id: client_order_id
           }
