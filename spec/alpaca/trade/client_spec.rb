@@ -87,6 +87,12 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(bars['CRM']).to be_an(Array)
       expect(bars['CRM'].size).to eq(10)
     end
+
+    it 'doesnt accept invalid time frames' do
+      expect {
+        subject.bars('1FOO', ['CRM'])
+      }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#calendar' do

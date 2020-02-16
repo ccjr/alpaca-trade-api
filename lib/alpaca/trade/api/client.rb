@@ -9,6 +9,8 @@ module Alpaca
       class Client
         attr_reader :data_endpoint, :endpoint, :key_id, :key_secret
 
+        TIMEFRAMES = ['minute', '1Min', '5Min', '15Min', 'day', '1D']
+
         def initialize(endpoint: Alpaca::Trade::Api.configuration.endpoint,
                        key_id: Alpaca::Trade::Api.configuration.key_id,
                        key_secret: Alpaca::Trade::Api.configuration.key_secret)
@@ -35,6 +37,7 @@ module Alpaca
         end
 
         def bars(timeframe, symbols, limit: 100)
+          validate_timeframe(timeframe)
           response = get_request(data_endpoint, "v1/bars/#{timeframe}", symbols: symbols.join(','), limit: limit)
           json = JSON.parse(response.body)
           json.keys.each_with_object({}) do |symbol, hash|
@@ -217,6 +220,12 @@ module Alpaca
           end
           if response.status == 500
             raise InternalServerError, JSON.parse(response.body)['message']
+          end
+        end
+
+        def validate_timeframe(timeframe)
+          unless TIMEFRAMES.include?(timeframe)
+            raise ArgumentError, "Invalid timeframe: #{timeframe}. Valid arguments are: #{TIMEFRAMES}"
           end
         end
       end
