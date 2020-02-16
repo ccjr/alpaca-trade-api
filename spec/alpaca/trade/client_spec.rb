@@ -87,6 +87,12 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(bars['CRM']).to be_an(Array)
       expect(bars['CRM'].size).to eq(10)
     end
+
+    it 'doesnt accept invalid time frames' do
+      expect {
+        subject.bars('1FOO', ['CRM'])
+      }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#calendar' do
@@ -173,6 +179,24 @@ RSpec.describe Alpaca::Trade::Api::Client do
                                 client_order_id: 'MY_ORDER_ID')
       expect(order).to be_an(Alpaca::Trade::Api::Order)
       expect(order.id).to_not be_nil
+    end
+
+    it 'supports bracket orders', :vcr do
+      order = subject.new_order(symbol: 'AAPL',
+                                qty: 5,
+                                side: 'buy',
+                                type: 'limit',
+                                order_class: 'bracket',
+                                time_in_force: 'day',
+                                limit_price: 325,
+                                take_profit: { limit_price: 335 },
+                                stop_loss: { stop_price: 315 },
+                                client_order_id: 'BRACKET_ORDER_ID')
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.order_class).to eq('bracket')
+      expect(order.legs).to be_an(Array)
+      expect(order.legs.size).to eq(2)
+      order.legs.each { |leg| expect(leg).to be_an(Alpaca::Trade::Api::Order) }
     end
 
     it 'raises an exception when buying power is not sufficient', :vcr do

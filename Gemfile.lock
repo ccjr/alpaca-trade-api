@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    alpaca-trade-api (0.3.0)
+    alpaca-trade-api (0.4.0)
       faraday (~> 0.15)
 
 GEM

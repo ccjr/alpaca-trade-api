@@ -4,34 +4,41 @@ module Alpaca
   module Trade
     module Api
       class Order
-        attr_reader :id, :client_order_id, :created_at, :updated_at, :submitted_at,
-          :filled_at, :expired_at, :canceled_at, :failed_at, :asset_id, :symbol,
-          :asset_class, :qty, :filled_qty, :type, :side, :time_in_force, :limit_price,
-          :stop_price, :filled_avg_price, :status, :extended_hours
+        attr_reader :id, :asset_class, :asset_id, :canceled_at, :client_order_id,
+          :created_at, :expired_at, :extended_hours, :failed_at, :filled_at, :filled_avg_price,
+          :filled_qty, :legs, :limit_price, :order_class, :qty, :replaced_at, :replaced_by,
+          :replaces, :side, :status, :stop_price, :submitted_at, :symbol, :time_in_force,
+          :type, :updated_at
 
         def initialize(json)
           @id = json['id']
+
+          @asset_class = json['asset_class']
+          @asset_id = json['asset_id']
+          @canceled_at = json['canceled_at']
           @client_order_id = json['client_order_id']
           @created_at = json['created_at']
-          @updated_at = json['updated_at']
-          @submitted_at = json['submitted_at']
-          @filled_at = json['filled_at']
           @expired_at = json['expired_at']
-          @canceled_at = json['canceled_at']
-          @failed_at = json['failed_at']
-          @asset_id = json['asset_id']
-          @symbol = json['symbol']
-          @asset_class = json['asset_class']
-          @qty = json['qty']
-          @filled_qty = json['filled_qty']
-          @type = json['type']
-          @side = json['side']
-          @time_in_force = json['time_in_force']
-          @limit_price = json['limit_price']
-          @stop_price = json['stop_price']
-          @filled_avg_price = json['filled_avg_price']
-          @status = json['status']
           @extended_hours = json['extended_hours']
+          @failed_at = json['failed_at']
+          @filled_at = json['filled_at']
+          @filled_avg_price = json['filled_avg_price']
+          @filled_qty = json['filled_qty']
+          @legs = (json['legs'] || []).map {|leg| Order.new(leg)}
+          @limit_price = json['limit_price']
+          @order_class = json['order_class']
+          @qty = json['qty']
+          @replaced_at = json['replaced_at']
+          @replaced_by = json['replaced_by']
+          @replaces = json['replaces']
+          @side = json['side']
+          @status = json['status']
+          @stop_price = json['stop_price']
+          @submitted_at = json['submitted_at']
+          @symbol = json['symbol']
+          @time_in_force = json['time_in_force']
+          @type = json['type']
+          @updated_at = json['updated_at']
         end
       end
     end
