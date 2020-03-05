@@ -36,9 +36,12 @@ module Alpaca
           json.map { |item| Asset.new(item) }
         end
 
-        def bars(timeframe, symbols, limit: 100)
+        #CRZ: using *args because of end: being a ruby keyword
+        def bars(timeframe, symbols, *args)
+          args.slice!(:limit, :start, :end, :until, :after)
+
           validate_timeframe(timeframe)
-          response = get_request(data_endpoint, "v1/bars/#{timeframe}", symbols: symbols.join(','), limit: limit)
+          response = get_request(data_endpoint, "v1/bars/#{timeframe}", args.merge(symbols: symbols.join(',')).compact)
           json = JSON.parse(response.body)
           json.keys.each_with_object({}) do |symbol, hash|
             hash[symbol] = json[symbol].map { |bar| Bar.new(bar) }
