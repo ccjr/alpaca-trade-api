@@ -57,7 +57,7 @@ Here's a table with all currently supported endpoints in this library:
 | Object | Action | Method |
 |------------------------------------------------------------------------------|---------------------------------------|--------------------------------|
 | [Account](https://docs.alpaca.markets/api-documentation/api-v2/account/)     | [GET] Get the account                 | Client#account                 |
-| [Orders](https://docs.alpaca.markets/api-documentation/api-v2/orders/)       | [GET] Get a list of orders            | Client#order                   |
+| [Orders](https://docs.alpaca.markets/api-documentation/api-v2/orders/)       | [GET] Get a list of orders            | Client#orders                  |
 |                                                                              | [POST] Request a new order            | Client#new_order               |
 |                                                                              | [GET] Get an order                    | Client#order(id:)              |
 |                                                                              | [GET] Get an order by client order id | Client#order(id:)              |
