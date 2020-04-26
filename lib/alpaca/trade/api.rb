@@ -14,6 +14,7 @@ require 'alpaca/trade/api/position'
 require 'alpaca/trade/api/client'
 require 'alpaca/trade/api/errors'
 
+require 'bigdecimal/util'
 require 'json'
 
 module Alpaca
