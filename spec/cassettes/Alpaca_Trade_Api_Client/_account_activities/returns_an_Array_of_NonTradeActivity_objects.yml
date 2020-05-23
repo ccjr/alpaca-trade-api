@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://paper-api.alpaca.markets/v2/account/activities/DIV
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.16.1
+      Date:
+      - Fri, 22 May 2020 23:40:31 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '2'
+      Connection:
+      - keep-alive
+      Vary:
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '[{"activity_type":"DIV","id":"20190801011955195::5f596936-6f23-4cef-bdf1-3806aae57dbf","date":"2019-08-01","net_amount":"1.02","symbol":"T","qty":"2","per_share_amount":"0.51"}]'
+    http_version:
+  recorded_at: Fri, 22 May 2020 23:40:31 GMT
+recorded_with: VCR 5.0.0

@@ -25,6 +25,14 @@ module Alpaca
           Account.new(JSON.parse(response.body))
         end
 
+        def account_activities(activity_type:)
+          response = get_request(endpoint, "/v2/account/activities/#{activity_type}")
+          raise InvalidActivityType, JSON.parse(response.body)['message'] if response.status == 422
+          json = JSON.parse(response.body)
+          activity_class = (TradeActivity::ATTRIBUTES - json.first.to_h.keys).none? ? TradeActivity : NonTradeActivity
+          json.map { |item| activity_class.new(item) }
+        end
+
         def asset(symbol:)
           response = get_request(endpoint, "v2/assets/#{symbol}")
           Asset.new(JSON.parse(response.body))

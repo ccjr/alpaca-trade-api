@@ -6,6 +6,7 @@ module Alpaca
       class Error < StandardError; end
       class InsufficientFunds < Error; end
       class InternalServerError < Error; end
+      class InvalidActivityType < Error; end
       class InvalidOrderId < Error; end
       class InvalidRequest < Error; end
       class MissingParameters < Error; end

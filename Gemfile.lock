@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    alpaca-trade-api (0.4.1)
+    alpaca-trade-api (0.5.0)
       faraday (~> 0.15)
 
 GEM
@@ -62,4 +62,4 @@ DEPENDENCIES
   webmock (~> 3.0)
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
