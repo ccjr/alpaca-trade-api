@@ -8,6 +8,7 @@ require 'alpaca/trade/api/asset'
 require 'alpaca/trade/api/bar'
 require 'alpaca/trade/api/calendar'
 require 'alpaca/trade/api/clock'
+require 'alpaca/trade/api/last_trade'
 require 'alpaca/trade/api/order'
 require 'alpaca/trade/api/position'
 
