@@ -48,10 +48,15 @@ RSpec.describe Alpaca::Trade::Api::Client do
       expect(trade_activities).to be_an(Array)
       expect(trade_activities.first).to be_an(Alpaca::Trade::Api::TradeActivity)
     end
+
     it 'returns an Array of NonTradeActivity objects', :vcr do
       trade_activities = subject.account_activities(activity_type: 'DIV')
       expect(trade_activities).to be_an(Array)
       expect(trade_activities.first).to be_an(Alpaca::Trade::Api::NonTradeActivity)
+    end
+
+    it 'raises an exception when the activity type requested is invalid', :vcr do
+      expect { subject.account_activities(activity_type: 'INVALID') }.to raise_error(Alpaca::Trade::Api::InvalidActivityType)
     end
   end
 
