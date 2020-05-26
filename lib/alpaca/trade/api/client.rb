@@ -105,6 +105,13 @@ module Alpaca
           end
         end
 
+        def last_trade(symbol:)
+          response = get_request(data_endpoint, "v1/last/stocks/#{symbol}")
+          raise InvalidRequest, JSON.parse(response.body)['message'] if response.status == 404
+
+          LastTrade.new(JSON.parse(response.body))
+        end
+
         def new_order(symbol:, qty:, side:, type:, time_in_force:, limit_price: nil,
           stop_price: nil, extended_hours: false, client_order_id: nil, order_class: nil,
           take_profit: nil, stop_loss: nil)

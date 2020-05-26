@@ -180,6 +180,22 @@ RSpec.describe Alpaca::Trade::Api::Client do
     end
   end
 
+  describe '#last_trade' do
+    it 'return last trade information', :vcr do
+      last_trade = subject.last_trade(symbol: 'TSLA')
+      expect(last_trade).to be_an(Alpaca::Trade::Api::LastTrade)
+      expect(last_trade.status).to eq('success')
+      expect(last_trade.symbol).to eq('TSLA')
+      expect(last_trade.last).to be_an(Hash)
+      expect(last_trade.last.keys.sort).to eq(["cond1", "cond2", "cond3", "cond4",
+        "exchange", "price", "size", "timestamp"])
+    end
+
+    it 'raises InvalidRequest on bogus symbol', :vcr do
+      expect { subject.last_trade(symbol: 'FOOBAR') }.to raise_error(Alpaca::Trade::Api::InvalidRequest)
+    end
+  end
+
   describe '#new_order' do
     it 'places a new Order', :vcr do
       order = subject.new_order(symbol: 'AAPL',
