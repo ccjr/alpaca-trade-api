@@ -1,0 +1,43 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://paper-api.alpaca.markets/v2/account/activities/FILL
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.16.1
+      Date:
+      - Fri, 22 May 2020 23:39:19 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      - Origin
+    body:
+      encoding: UTF-8
+      string: '[{"id":"20200522035112065::a80dfbdf-42ea-459f-82ea-61cf91691913","activity_type":"FILL","transaction_time":"2020-05-22T19:51:12.065361Z","type":"fill","price":"186.98","qty":"26","side":"buy","symbol":"WAT","leaves_qty":"0","order_id":"b48a6dd1-0100-458e-8a30-463a9cf6aaf7","cum_qty":"26"},{"id":"20200522035111785::9d7cb6c3-4a2d-429c-bac9-e361ef24b67f","activity_type":"FILL","transaction_time":"2020-05-22T19:51:11.785756Z","type":"fill","price":"137.41","qty":"36","side":"sell","symbol":"FFIV","leaves_qty":"0","order_id":"a062e853-eaa3-4e29-a4ff-1b9c5f2ab68c","cum_qty":"36"},{"id":"20200522035012378::d142eeab-78bc-4af6-a7e5-4958fd4f6245","activity_type":"FILL","transaction_time":"2020-05-22T19:50:12.37857Z","type":"fill","price":"137.52","qty":"36","side":"buy","symbol":"FFIV","leaves_qty":"0","order_id":"9e9c54eb-6f7d-49f3-9321-7604a3af4b70","cum_qty":"36"},{"id":"20200522035012108::e857c136-6fef-43fa-ad9a-fed3f333d327","activity_type":"FILL","transaction_time":"2020-05-22T19:50:12.10842Z","type":"fill","price":"6.39","qty":"781","side":"sell","symbol":"GE","leaves_qty":"0","order_id":"58025b23-18c3-4b4b-b358-1a1f266eb314","cum_qty":"781"},{"id":"20200522034912032::74872440-31a3-4a00-8cac-bd9c96bc8b56","activity_type":"FILL","transaction_time":"2020-05-22T19:49:12.032086Z","type":"fill","price":"6.4","qty":"781","side":"buy","symbol":"GE","leaves_qty":"0","order_id":"81fe9524-5374-4ae6-82de-91bf4ccd4589","cum_qty":"781"},{"id":"20200522034911744::5398eb40-a1da-4628-88e1-74dbc5cb9e7f","activity_type":"FILL","transaction_time":"2020-05-22T19:49:11.744693Z","type":"fill","price":"16.93","qty":"295","side":"sell","symbol":"HRB","leaves_qty":"0","order_id":"f532d0ff-a3ce-4637-a20d-f34a06c66975","cum_qty":"295"},{"id":"20200522034812221::9db7638f-3bfe-4e29-9594-13ea40138863","activity_type":"FILL","transaction_time":"2020-05-22T19:48:12.221661Z","type":"fill","price":"16.93","qty":"104","side":"buy","symbol":"HRB","leaves_qty":"0","order_id":"41e50621-273f-44a3-93fd-174dcf068fd0","cum_qty":"295"},{"id":"20200522034812092::cb073128-eb52-4fe9-86ba-7e4d0d13fd33","activity_type":"FILL","transaction_time":"2020-05-22T19:48:12.092761Z","type":"partial_fill","price":"16.93","qty":"191","side":"buy","symbol":"HRB","leaves_qty":"104","order_id":"41e50621-273f-44a3-93fd-174dcf068fd0","cum_qty":"191"},{"id":"20200522034811917::06165f0b-a471-473b-aaf3-1417df7489ef","activity_type":"FILL","transaction_time":"2020-05-22T19:48:11.917206Z","type":"fill","price":"105.8","qty":"22","side":"sell","symbol":"CDW","leaves_qty":"0","order_id":"d90bcdc3-468d-4469-9cbf-dd488cf0ffd7","cum_qty":"47"},{"id":"20200522034811787::ed4cae5e-502d-4fef-973e-820ea6e018a7","activity_type":"FILL","transaction_time":"2020-05-22T19:48:11.787275Z","type":"partial_fill","price":"105.8","qty":"25","side":"sell","symbol":"CDW","leaves_qty":"22","order_id":"d90bcdc3-468d-4469-9cbf-dd488cf0ffd7","cum_qty":"25"},{"id":"20200522034713334::69149d34-32b6-426e-9a35-bbc228fc1258","activity_type":"FILL","transaction_time":"2020-05-22T19:47:13.334795Z","type":"fill","price":"105.82","qty":"47","side":"buy","symbol":"CDW","leaves_qty":"0","order_id":"1738b29f-470d-4c57-a58f-f4bcfb103d0b","cum_qty":"47"},{"id":"20200522034712648::a2879c01-51b6-4197-8212-3d5d3d9d851d","activity_type":"FILL","transaction_time":"2020-05-22T19:47:12.648951Z","type":"fill","price":"86.84","qty":"57","side":"sell","symbol":"BAX","leaves_qty":"0","order_id":"12796b7d-8460-4ad9-b2ed-99fd5fafd0f7","cum_qty":"57"},{"id":"20200522034623899::5a7502bc-9163-4a76-882e-dfdb2510e1db","activity_type":"FILL","transaction_time":"2020-05-22T19:46:23.899828Z","type":"fill","price":"86.88","qty":"57","side":"buy","symbol":"BAX","leaves_qty":"0","order_id":"4b9dd9a4-bd34-4d50-97f3-05ea79c3b595","cum_qty":"57"},{"id":"20200522034612345::287ecc1f-a2bd-4199-ac1f-bdb951560d96","activity_type":"FILL","transaction_time":"2020-05-22T19:46:12.345071Z","type":"fill","price":"35.91","qty":"139","side":"sell","symbol":"BSX","leaves_qty":"0","order_id":"79947474-4bd2-47db-bb02-25e2f084608b","cum_qty":"139"},{"id":"20200522034556907::0d7d5a5d-57d6-41c6-b740-9f21efa3187d","activity_type":"FILL","transaction_time":"2020-05-22T19:45:56.907534Z","type":"fill","price":"35.91","qty":"139","side":"buy","symbol":"BSX","leaves_qty":"0","order_id":"a061351e-bf3e-4b17-9e41-cca02497bbb8","cum_qty":"139"},{"id":"20200522034312405::cc321e9e-4c59-4ba0-a066-e80559f71e5e","activity_type":"FILL","transaction_time":"2020-05-22T19:43:12.405353Z","type":"fill","price":"7.33","qty":"680","side":"sell","symbol":"UA","leaves_qty":"0","order_id":"b82185bb-28bd-4e08-b431-133260b6b09a","cum_qty":"680"},{"id":"20200522033246911::7ae7fcf5-ecd4-4ffb-9ef5-c97cd9efab42","activity_type":"FILL","transaction_time":"2020-05-22T19:32:46.911395Z","type":"fill","price":"7.35","qty":"309","side":"buy","symbol":"UA","leaves_qty":"0","order_id":"1068bd84-3e2e-402d-9f80-3a5001f1bef0","cum_qty":"680"},{"id":"20200522033246756::12032bf0-8b33-49b3-bcec-f4954d0ff18a","activity_type":"FILL","transaction_time":"2020-05-22T19:32:46.756339Z","type":"partial_fill","price":"7.35","qty":"371","side":"buy","symbol":"UA","leaves_qty":"309","order_id":"1068bd84-3e2e-402d-9f80-3a5001f1bef0","cum_qty":"371"},{"id":"20200522033246380::665b9d9e-ac30-4279-99d6-c78618d497b4","activity_type":"FILL","transaction_time":"2020-05-22T19:32:46.380539Z","type":"fill","price":"240.36","qty":"20","side":"sell","symbol":"CTAS","leaves_qty":"0","order_id":"81a382a8-499d-4395-ab07-6458780937f7","cum_qty":"20"},{"id":"20200522033150594::a815e8ab-0c0f-40de-83a1-6d533cd062d8","activity_type":"FILL","transaction_time":"2020-05-22T19:31:50.594603Z","type":"fill","price":"240.54","qty":"20","side":"buy","symbol":"CTAS","leaves_qty":"0","order_id":"5d3edc13-01ac-4523-b365-4e7f472521af","cum_qty":"20"}]'
+    http_version:
+  recorded_at: Fri, 22 May 2020 23:39:20 GMT
+recorded_with: VCR 5.0.0
