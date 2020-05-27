@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0] - 2020-05-26
 ### Added
-- Implemented Client#account_activities.
+- Implemented Client#account_activities. Thanks @travishooper.
 
 ## [0.5.0] - 2020-05-25
 ### Added
