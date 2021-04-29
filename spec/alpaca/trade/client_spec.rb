@@ -233,6 +233,27 @@ RSpec.describe Alpaca::Trade::Api::Client do
       order.legs.each { |leg| expect(leg).to be_an(Alpaca::Trade::Api::Order) }
     end
 
+    it 'supports fractionable orders', :vcr do
+        # require 'pry'; binding.pry
+      order = subject.new_order(symbol: 'AAPL',
+                                qty: 1.8,
+                                side: 'buy',
+                                type: 'market',
+                                time_in_force: 'day')
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.id).to_not be_nil
+    end
+
+    it 'supports notional orders', :vcr do
+      order = subject.new_order(symbol: 'AAPL',
+                                notional: 500,
+                                side: 'buy',
+                                type: 'market',
+                                time_in_force: 'day')
+      expect(order).to be_an(Alpaca::Trade::Api::Order)
+      expect(order.id).to_not be_nil
+    end
+
     it 'raises an exception when buying power is not sufficient', :vcr do
       expect { subject.new_order(symbol: 'AAPL',
                                  qty: 5_000,

@@ -112,16 +112,17 @@ module Alpaca
           LastTrade.new(JSON.parse(response.body))
         end
 
-        def new_order(symbol:, qty:, side:, type:, time_in_force:, limit_price: nil,
-          stop_price: nil, extended_hours: false, client_order_id: nil, order_class: nil,
-          take_profit: nil, stop_loss: nil)
+        def new_order(symbol:, side:, type:, time_in_force:, qty: nil, notional: nil,
+          limit_price: nil, stop_price: nil, extended_hours: false, client_order_id: nil,
+          order_class: nil, take_profit: nil, stop_loss: nil)
 
           params = {
             symbol: symbol,
-            qty: qty,
             side: side,
             type: type,
             time_in_force: time_in_force,
+            qty: qty,
+            notional: notional,
             limit_price: limit_price,
             order_class: order_class,
             stop_price: stop_price,
