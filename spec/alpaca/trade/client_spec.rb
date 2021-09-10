@@ -84,12 +84,12 @@ RSpec.describe Alpaca::Trade::Api::Client do
 
   describe '#bars' do
     it 'returns Bar objects for one symbol', :vcr do
-      bars = subject.bars('1D', ['CRM'])
-      expect(bars['CRM']).to be_an(Array)
+      bars = subject.bars(timeframe: '1Day', symbol:'QQQ', start:'2021-08-26T14:00:00Z', limit: 3)
+      expect(bars['bars']).to be_an(Array)
 
-      bar = bars['CRM'].first
+      bar = bars['bars'].first
       expect(bar).to be_an(Alpaca::Trade::Api::Bar)
-      expect(bar.close).to eq(160.57)
+      expect(bar.close).to eq(368.73)
     end
 
     it 'returns Bar objects for multiple symbols', :vcr do

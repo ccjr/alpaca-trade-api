@@ -74,7 +74,7 @@ Here's a table with all currently supported endpoints in this library:
 |                                                                                               | [GET] Get an asset                     | Client#asset(symbol:)                     |
 | [Calendar](https://docs.alpaca.markets/api-documentation/api-v2/calendar/)                    | [GET] Get the calendar                 | Client#calendar(start_date:, end_date:)   |
 | [Clock](https://docs.alpaca.markets/api-documentation/api-v2/clock/)                          | [GET] Get the clock                    | Client#clock                              |
-| [Bars](https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/#bars)                | [GET] Get a list of bars               | Client#bars(timeframe:, symbol:, start:, end:, limit:)   |
+| [Bars](https://alpaca.markets/docs/api-documentation/api-v2/market-data/alpaca-data-api-v2/historical/#bars)                | [GET] Get a list of bars               | Client#bars(timeframe:, symbol:, start:, end_:, limit:)   |
 
 ## Development
 
