@@ -44,9 +44,9 @@ module Alpaca
           json.map { |item| Asset.new(item) }
         end
 
-        def bars(timeframe, symbols, limit: 100)
+        def bars(timeframe:, symbol:, start:, end: end_, limit: 100)
           validate_timeframe(timeframe)
-          response = get_request(data_endpoint, "v1/bars/#{timeframe}", symbols: symbols.join(','), limit: limit)
+          response = get_request(data_endpoint, "v2/stocks/#{symbol}/bars", limit: limit, timeframe: timeframe, start: start, end: end_)
           json = JSON.parse(response.body)
           json.keys.each_with_object({}) do |symbol, hash|
             hash[symbol] = json[symbol].map { |bar| Bar.new(bar) }
