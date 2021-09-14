@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://data.alpaca.markets/v2/stocks/QQQ/bars?limit=3&start=2021-08-26T14:00:00Z&timeframe=1Day
+    uri: https://data.alpaca.markets/v2/stocks/QQQ/bars?end=2021-09-06T14:00:00Z&limit=3&start=2021-08-26T14:00:00Z&timeframe=15Min
     body:
       encoding: US-ASCII
       string: ''
@@ -36,6 +36,6 @@ http_interactions:
       - Accept-Encoding
     body:
       encoding: UTF-8
-      string: '{"bars":[{"t":"2021-08-09T04:00:00Z","o":368.52,"h":369.27,"l":367.39,"c":368.73,"v":25923167,"n":157639,"vw":368.51266},{"t":"2021-08-10T04:00:00Z","o":369.26,"h":369.56,"l":365.62,"c":366.84,"v":35616102,"n":264266,"vw":367.291272},{"t":"2021-08-11T04:00:00Z","o":368.14,"h":368.65,"l":364.84,"c":366.21,"v":34160658,"n":244770,"vw":366.441769}],"symbol":"QQQ","next_page_token":"UVFRfER8MjAyMS0wOC0xMVQwNDowMDowMC4wMDAwMDAwMDBa"}'
+      string: '{"bars":[{"t":"2021-08-26T14:00:00Z","o":373.9,"h":374.62,"l":373.84,"c":374.25,"v":1345904,"n":8485,"vw":374.329104},{"t":"2021-08-26T14:15:00Z","o":374.25,"h":374.285,"l":372.29,"c":372.945,"v":2427980,"n":20301,"vw":373.166225},{"t":"2021-08-26T14:30:00Z","o":372.95,"h":373.54,"l":372.4,"c":372.75,"v":1823073,"n":15543,"vw":372.982425}],"symbol":"QQQ","next_page_token":"UVFRfE18MjAyMS0wOC0yNlQxNDo0NDowMC4wMDAwMDAwMDBa"}'
   recorded_at: Fri, 12 Jul 2019 03:07:05 GMT
 recorded_with: VCR 5.0.0

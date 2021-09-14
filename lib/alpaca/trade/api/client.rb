@@ -10,7 +10,7 @@ module Alpaca
         attr_reader :data_endpoint, :endpoint, :key_id, :key_secret
 
         TIMEFRAMES = ['1Min', '15Min', '1Hour', '1Day']
-        
+
         def initialize(endpoint: Alpaca::Trade::Api.configuration.endpoint,
                        key_id: Alpaca::Trade::Api.configuration.key_id,
                        key_secret: Alpaca::Trade::Api.configuration.key_secret)
@@ -44,13 +44,11 @@ module Alpaca
           json.map { |item| Asset.new(item) }
         end
 
-        def bars(timeframe:, symbol:, start:, limit: 100)
+        def bars(timeframe:, symbol:, start:, end_: Time.now, limit: 100)
           validate_timeframe(timeframe)
-          response = get_request(data_endpoint, "v2/stocks/#{symbol}/bars", limit: limit, timeframe: timeframe, start: start)
+          response = get_request(data_endpoint, "v2/stocks/#{symbol}/bars", limit: limit, timeframe: timeframe, start: start, end: end_)
           json = JSON.parse(response.body)
-          json.keys.each_with_object({}) do |symbol, hash|
-            hash[symbol] = json[symbol].map { |bar| Bar.new(bar) }
-          end
+          json["bars"].map { |bar| Bar.new(bar) }
         end
 
         def calendar(start_date: Date.today, end_date: (Date.today + 30))
