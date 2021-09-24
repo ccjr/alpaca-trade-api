@@ -84,7 +84,7 @@ RSpec.describe Alpaca::Trade::Api::Client do
 
   describe '#bars' do
     it 'returns Bar objects for one symbol', :vcr do
-      bars = subject.bars(timeframe: '15Min', symbol:'QQQ', start:'2021-08-26T14:00:00Z', end_: '2021-09-06T14:00:00Z', limit: 3)
+      bars = subject.bars(timeframe: '15Min', symbol:'QQQ', start: Time.new(2021, 8, 26, 14, 0, 0,  "+00:00"), end_: Time.new(2021, 9, 6, 14, 0, 0,  "+00:00"), limit: 3)
       puts bars.inspect
       expect(bars).to be_an(Array)
 
@@ -104,7 +104,7 @@ RSpec.describe Alpaca::Trade::Api::Client do
     # end
 
     it 'accepts limit as parameter', :vcr do
-      bars = subject.bars(timeframe: '15Min', symbol:'QQQ', start:'2021-08-26T14:00:00Z', end_: '2021-09-06T14:00:00Z', limit: 3)
+      bars = subject.bars(timeframe: '15Min', symbol:'QQQ', start:Time.new(2021, 8, 26, 14, 0, 0,  "+00:00"), end_: Time.new(2021, 9, 6, 14, 0, 0,  "+00:00"), limit: 3)
       expect(bars).to be_an(Array)
       expect(bars.size).to eq(3)
     end
