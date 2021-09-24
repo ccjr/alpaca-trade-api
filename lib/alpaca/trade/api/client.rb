@@ -47,6 +47,7 @@ module Alpaca
         def bars(timeframe:, symbol:, start:, end_: Time.now, limit: 100)
           validate_timeframe(timeframe)
           response = get_request(data_endpoint, "v2/stocks/#{symbol}/bars", limit: limit, timeframe: timeframe, start: start.utc.strftime('%FT%TZ'), end: end_.utc.strftime('%FT%TZ'))
+          puts response
           json = JSON.parse(response.body)
           json["bars"].map { |bar| Bar.new(bar) }
         end
