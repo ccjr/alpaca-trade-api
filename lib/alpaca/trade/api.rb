@@ -17,8 +17,12 @@ require 'alpaca/trade/api/trade_activity'
 require 'alpaca/trade/api/client'
 require 'alpaca/trade/api/errors'
 
+require 'alpaca/market/client'
+require 'alpaca/market/crypto/bar'
+
 require 'bigdecimal/util'
 require 'json'
+require 'time'
 
 module Alpaca
   module Trade
