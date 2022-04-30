@@ -10,9 +10,9 @@ http_interactions:
       User-Agent:
       - Faraday v1.10.0
       Apca-Api-Key-Id:
-      - "<KEY ID>"
+      - "KEY_ID"
       Apca-Api-Secret-Key:
-      - "<KEY SECRET>"
+      - "KEY_S3CRET"
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
