@@ -6,7 +6,6 @@ RSpec.describe Alpaca::Trade::Api do
   end
 
   describe '.configure' do
-    let(:logger) { double(:logger) }
     let(:key_id) { 'KEY_ID' }
     let(:key_secret) { 'KEY_S3CRET' }
 
