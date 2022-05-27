@@ -145,8 +145,9 @@ module Alpaca
           Order.new(JSON.parse(response.body))
         end
 
-        def orders(status: nil, after: nil, until_time: nil, direction: nil, limit: 50)
-          params = { status: status, after: after, until: until_time, direction: direction, limit: limit }
+        def orders(status: nil, symbols: nil, after: nil, until_time: nil, direction: nil, limit: 50)
+          byebug
+          params = { status: status, symbols:symbols, after: after, until: until_time, direction: direction, limit: limit }
           response = get_request(endpoint, "v2/orders", params.compact)
           json = JSON.parse(response.body)
           json.map { |item| Order.new(item) }
