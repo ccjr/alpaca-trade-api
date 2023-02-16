@@ -72,11 +72,11 @@ module Alpaca
           response = delete_request(endpoint, 'v2/orders')
 
           json = JSON.parse(response.body)
+
           json.map do |item|
             {
               'id' => item['id'],
-              'status' => item['status'],
-              'body' => Order.new(item['body']),
+              'status' => item['status']
             }
           end
         end
