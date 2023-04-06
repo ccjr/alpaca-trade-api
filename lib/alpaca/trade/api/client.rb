@@ -25,8 +25,12 @@ module Alpaca
           Account.new(JSON.parse(response.body))
         end
 
-        def account_activities(activity_type:)
-          response = get_request(endpoint, "/v2/account/activities/#{activity_type}")
+        def account_activities(activity_type:, date:nil, after:nil, until_time:nil, direction:nil, page_size:nil, page_token:nil)
+          if date.present? && (until_time.present? || after.present?)
+            raise InvalidParameters, 'date cannot be used with either until_time or after'
+          end
+          params = { date:date, until_time:until_time, after:after, direction:direction, page_size:page_size, page_token:page_token }
+          response = get_request(endpoint, "/v2/account/activities/#{activity_type}", params)
           raise InvalidActivityType, JSON.parse(response.body)['message'] if response.status == 422
           json = JSON.parse(response.body)
           activity_class = (TradeActivity::ATTRIBUTES - json.first.to_h.keys).none? ? TradeActivity : NonTradeActivity
@@ -145,8 +149,8 @@ module Alpaca
           Order.new(JSON.parse(response.body))
         end
 
-        def orders(status: nil, after: nil, until_time: nil, direction: nil, limit: 50)
-          params = { status: status, after: after, until: until_time, direction: direction, limit: limit }
+        def orders(status: nil, symbols: nil, after: nil, until_time: nil, direction: nil, limit: 50)
+          params = { status: status, symbols:symbols, after: after, until: until_time, direction: direction, limit: limit }
           response = get_request(endpoint, "v2/orders", params.compact)
           json = JSON.parse(response.body)
           json.map { |item| Order.new(item) }

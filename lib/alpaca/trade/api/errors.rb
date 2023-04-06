@@ -8,6 +8,7 @@ module Alpaca
       class InternalServerError < Error; end
       class InvalidActivityType < Error; end
       class InvalidOrderId < Error; end
+      class InvalidParameters < Error; end
       class InvalidRequest < Error; end
       class MissingParameters < Error; end
       class NoPositionForSymbol < Error; end
