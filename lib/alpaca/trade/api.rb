@@ -18,7 +18,9 @@ require 'alpaca/trade/api/client'
 require 'alpaca/trade/api/errors'
 
 require 'alpaca/market/client'
-require 'alpaca/market/crypto/bar'
+require 'alpaca/market/stock_client'
+require 'alpaca/market/stock/bar'
+require 'alpaca/market/stock/trade'
 
 require 'bigdecimal/util'
 require 'json'
