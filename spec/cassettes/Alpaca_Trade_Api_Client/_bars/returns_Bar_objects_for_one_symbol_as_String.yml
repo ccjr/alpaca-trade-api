@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://data.alpaca.markets/v2/stocks/bars?feed=sip&limit=100&start=2023-11-22T00:00:00%2B00:00&symbols=CRM&timeframe=1D
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.0
+      Apca-Api-Key-Id:
+      - "<KEY ID>"
+      Apca-Api-Secret-Key:
+      - "<KEY SECRET>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 02 Dec 2023 20:24:45 GMT
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Ratelimit-Limit:
+      - '200'
+      X-Ratelimit-Remaining:
+      - '198'
+      X-Ratelimit-Reset:
+      - '1701548686'
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Request-Id:
+      - 07db06dcd7e027c3edc865663ac0b942
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Apca-Api-Key-Id, Apca-Api-Secret-Key, Authorization
+      Access-Control-Max-Age:
+      - '1728000'
+    body:
+      encoding: UTF-8
+      string: '{"bars":{"CRM":[{"c":223.84,"h":225.6894,"l":223.21,"n":72288,"o":224.3,"t":"2023-11-22T05:00:00Z","v":3894415,"vw":224.245398},{"c":224.38,"h":224.49,"l":222.12,"n":29902,"o":224.36,"t":"2023-11-24T05:00:00Z","v":1874513,"vw":224.0043},{"c":224.79,"h":226.22,"l":224.25,"n":86213,"o":225.5,"t":"2023-11-27T05:00:00Z","v":4885508,"vw":225.135271},{"c":224.92,"h":225.53,"l":222.23,"n":84210,"o":223.61,"t":"2023-11-28T05:00:00Z","v":5535337,"vw":224.479054},{"c":230.35,"h":231.5,"l":227.26,"n":190180,"o":228.61,"t":"2023-11-29T05:00:00Z","v":12327444,"vw":232.588942},{"c":251.9,"h":252.5,"l":243.65,"n":311254,"o":249.05,"t":"2023-11-30T05:00:00Z","v":24425717,"vw":248.987512},{"c":260,"h":263.43,"l":249.7,"n":200641,"o":250,"t":"2023-12-01T05:00:00Z","v":14532945,"vw":258.76434}]},"next_page_token":null}'
+  recorded_at: Sat, 02 Dec 2023 20:24:45 GMT
+recorded_with: VCR 6.1.0

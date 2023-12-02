@@ -83,32 +83,41 @@ RSpec.describe Alpaca::Trade::Api::Client do
   end
 
   describe '#bars' do
-    it 'returns Bar objects for one symbol', :vcr do
-      bars = subject.bars('1D', ['CRM'])
-      expect(bars['CRM']).to be_an(Array)
+    it 'returns Bar objects for one symbol as Array', :vcr do
+      bars = subject.bars(timeframe: '1D', symbols: ['CRM'], start_date: Date.today - 10)
+      expect(bars['bars']['CRM']).to be_an(Array)
 
-      bar = bars['CRM'].first
+      bar = bars['bars']['CRM'].first
       expect(bar).to be_an(Alpaca::Trade::Api::Bar)
-      expect(bar.close).to eq(160.57)
+      expect(bar.close).to eq(223.84)
+    end
+
+    it 'returns Bar objects for one symbol as String', :vcr do
+      bars = subject.bars(timeframe: '1D', symbols: 'CRM', start_date: Date.today - 10)
+      expect(bars['bars']['CRM']).to be_an(Array)
+
+      bar = bars['bars']['CRM'].first
+      expect(bar).to be_an(Alpaca::Trade::Api::Bar)
+      expect(bar.close).to eq(223.84)
     end
 
     it 'returns Bar objects for multiple symbols', :vcr do
-      bars = subject.bars('1D', %w[CRM FB AMZN])
-      expect(bars['FB']).to be_an(Array)
+      bars = subject.bars(timeframe: '1D', symbols: %w[CRM FB AMZN], start_date: Date.today - 10)
+      expect(bars['bars']['FB']).to be_an(Array)
 
-      bar = bars['AMZN'].first
+      bar = bars['bars']['AMZN'].first
       expect(bar).to be_an(Alpaca::Trade::Api::Bar)
     end
 
     it 'accepts limit as parameter', :vcr do
-      bars = subject.bars('1D', ['CRM'], limit: 10)
-      expect(bars['CRM']).to be_an(Array)
-      expect(bars['CRM'].size).to eq(10)
+      bars = subject.bars(timeframe: '1D', symbols: ['CRM'], limit: 10, start_date: Date.today - 100)
+      expect(bars['bars']['CRM']).to be_an(Array)
+      expect(bars['bars']['CRM'].size).to eq(10)
     end
 
     it 'doesnt accept invalid time frames' do
       expect {
-        subject.bars('1FOO', ['CRM'])
+        subject.bars(timeframe: 'bogus', symbols: 'CRM', limit: 10, start_date: Date.today - 100)
       }.to raise_error(ArgumentError)
     end
   end

@@ -48,13 +48,49 @@ module Alpaca
           json.map { |item| Asset.new(item) }
         end
 
-        def bars(timeframe, symbols, limit: 100)
+        # {
+        #   "bars": {
+        #     "AAPL": [
+        #       {
+        #         "t": "2022-01-03T09:00:00Z",
+        #         "o": 178.26,
+        #         "h": 178.26,
+        #         "l": 178.21,
+        #         "c": 178.21,
+        #         "v": 1118,
+        #         "n": 65,
+        #         "vw": 178.235733
+        #       }
+        #     ]
+        #   },
+        #   "next_page_token": "QUFQTHxNfDIwMjItMDEtMDNUMDk6MDA6MDAuMDAwMDAwMDAwWg=="
+        # }
+        def bars(timeframe: '1D', symbols:, limit: 100, start_date: nil, end_date: nil, feed: 'sip', asof: nil)
           validate_timeframe(timeframe)
-          response = get_request(data_endpoint, "v1/bars/#{timeframe}", symbols: symbols.join(','), limit: limit)
+          validate_symbols(symbols)
+
+          symbols = Array(symbols)
+          params = {
+            symbols: symbols.join(','),
+            limit: limit,
+            timeframe: timeframe,
+            feed: feed
+          }
+          params[:start] = start_date.rfc3339 if start_date
+          params[:end]  = end_date.rfc3339 if end_date
+
+          params[:asof] = asof.strftime("%Y-%m-%d") if asof.is_a?(Date) || asof.is_a?(Time)
+          params[:asof] ||= asof if asof.is_a?(String)
+
+          response = get_request(data_endpoint, "v2/stocks/bars", params)
+          raise InvalidRequest, JSON.parse(response.body)['message'] if response.status == 404
+
           json = JSON.parse(response.body)
-          json.keys.each_with_object({}) do |symbol, hash|
-            hash[symbol] = json[symbol].map { |bar| Bar.new(bar) }
+          hash = { "next_page_token" => json["next_page_token"], "bars" => {} }
+          symbols.each do |symbol|
+            hash["bars"][symbol] = json["bars"][symbol]&.map { |bar| Bar.new(bar) } || []
           end
+          hash.merge({ 'next_page_token' => json['next_page_token'] })
         end
 
         def calendar(start_date: Date.today, end_date: (Date.today + 30))
@@ -249,9 +285,14 @@ module Alpaca
         end
 
         def validate_timeframe(timeframe)
-          unless TIMEFRAMES.include?(timeframe)
-            raise ArgumentError, "Invalid timeframe: #{timeframe}. Valid arguments are: #{TIMEFRAMES}"
-          end
+          return if TIMEFRAMES.include?(timeframe)
+          raise ArgumentError, "Invalid timeframe: #{timeframe}. Valid arguments are: #{TIMEFRAMES}"
+        end
+
+        def validate_symbols(symbols)
+          return if symbols.is_a?(String)
+          return if symbols.is_a?(Array) && symbols.all?{ |symbol| symbol.is_a?(String) }
+          raise ArgumentError, "Invalid symbols: #{symbols.inspect}. Symbols must be a String or an array of strings."
         end
       end
     end
