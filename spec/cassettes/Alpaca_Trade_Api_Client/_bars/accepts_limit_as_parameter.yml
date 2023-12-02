@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://data.alpaca.markets/v1/bars/1D?limit=10&symbols=CRM
+    uri: https://data.alpaca.markets/v2/stocks/bars?feed=sip&limit=10&start=2023-08-24T00:00:00%2B00:00&symbols=CRM&timeframe=1D
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.15.4
+      - Faraday v1.10.0
       Apca-Api-Key-Id:
       - "<KEY ID>"
       Apca-Api-Secret-Key:
@@ -22,19 +22,38 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Server:
-      - nginx/1.13.0
       Date:
-      - Fri, 12 Jul 2019 03:08:10 GMT
+      - Sat, 02 Dec 2023 20:17:02 GMT
       Content-Type:
       - application/json; charset=UTF-8
-      Content-Length:
-      - '740'
+      Transfer-Encoding:
+      - chunked
       Connection:
       - keep-alive
+      Vary:
+      - Accept-Encoding
+      X-Ratelimit-Limit:
+      - '200'
+      X-Ratelimit-Remaining:
+      - '199'
+      X-Ratelimit-Reset:
+      - '1701548222'
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Request-Id:
+      - 86c3ec6a6378963e11c69bfc29777076
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - Apca-Api-Key-Id, Apca-Api-Secret-Key, Authorization
+      Access-Control-Max-Age:
+      - '1728000'
     body:
       encoding: UTF-8
-      string: '{"CRM":[{"t":1561608000,"o":149.89,"h":150.76,"l":148.47,"c":150.67,"v":6338779},{"t":1561694400,"o":151.11,"h":151.77,"l":149.6,"c":151.53,"v":4664177},{"t":1561953600,"o":154.57,"h":154.74,"l":151.8503,"c":154.01,"v":5662224},{"t":1562040000,"o":154.29,"h":154.36,"l":152.58,"c":154.12,"v":4352992},{"t":1562126400,"o":154.54,"h":155.75,"l":154.16,"c":155.73,"v":3106378},{"t":1562299200,"o":153.95,"h":154.805,"l":152.57,"c":154.61,"v":3572534},{"t":1562558400,"o":153.52,"h":153.69,"l":152.044,"c":152.81,"v":3937622},{"t":1562644800,"o":152.08,"h":154.19,"l":151.68,"c":153.91,"v":4236667},{"t":1562731200,"o":154.57,"h":156.4,"l":154.57,"c":156.24,"v":4353955},{"t":1562817600,"o":156.82,"h":159.3,"l":156.62,"c":158.88,"v":6524677}]}'
-    http_version: 
-  recorded_at: Fri, 12 Jul 2019 03:08:11 GMT
-recorded_with: VCR 5.0.0
+      string: '{"bars":{"CRM":[{"c":205.51,"h":211.99,"l":205.44,"n":73644,"o":211.01,"t":"2023-08-24T04:00:00Z","v":3960327,"vw":206.957144},{"c":209.47,"h":210.79,"l":205.48,"n":59119,"o":205.51,"t":"2023-08-25T04:00:00Z","v":3068821,"vw":208.840682},{"c":211.72,"h":213.4767,"l":209.64,"n":69497,"o":210.45,"t":"2023-08-28T04:00:00Z","v":4086853,"vw":211.230273},{"c":211.96,"h":212.46,"l":206.52,"n":102342,"o":206.75,"t":"2023-08-29T04:00:00Z","v":5850366,"vw":210.626318},{"c":215.04,"h":215.59,"l":209.43,"n":150629,"o":211.77,"t":"2023-08-30T04:00:00Z","v":9946012,"vw":216.67428},{"c":221.46,"h":228.79,"l":221.2,"n":219363,"o":228,"t":"2023-08-31T04:00:00Z","v":19268400,"vw":223.733395},{"c":221.53,"h":223.97,"l":220.52,"n":92641,"o":223.5,"t":"2023-09-01T04:00:00Z","v":5600940,"vw":221.828052},{"c":218.69,"h":220.3199,"l":217.61,"n":96792,"o":219.33,"t":"2023-09-05T04:00:00Z","v":5807336,"vw":219.030671},{"c":221.62,"h":222.2099,"l":219.02,"n":86904,"o":219.47,"t":"2023-09-06T04:00:00Z","v":5066666,"vw":221.04745},{"c":222.53,"h":222.73,"l":219.31,"n":70468,"o":219.77,"t":"2023-09-07T04:00:00Z","v":4201916,"vw":221.882464}]},"next_page_token":"Q1JNfER8MTY5NDA1OTIwMDAwMDAwMDAwMA=="}'
+  recorded_at: Sat, 02 Dec 2023 20:17:02 GMT
+recorded_with: VCR 6.1.0
