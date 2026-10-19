@@ -236,43 +236,22 @@ updates.on_error { |error| warn error.message }
 updates.run   # blocks; reconnects with backoff; call updates.stop from any thread to finish
 ```
 
-STREAMING_```ruby
-data = Alpaca::MarketData::Client.new(feed: :sip)   # same credentials as Trading; feed applies to stocks
-data = broker.market_data                            # Broker partners: reuses the Broker credentials
+```ruby
+stream = Alpaca::Streaming::MarketData.stocks(feed: :sip)
+stream.on_trade("AAPL", "MSFT") { |trade| puts "#{trade.symbol} #{trade.price} x #{trade.size}" }
+stream.on_bar("*") { |bar| ... }
+stream.on_error { |error| warn error.message }
+Thread.new { stream.run }
+stream.subscribe(quotes: %w[NVDA])      # change subscriptions while running, from any thread
+stream.unsubscribe(trades: %w[MSFT])
 
-# Historical data returns a lazy Series: one symbol (String) or many (Array)
-bars = data.stocks.bars(%w[AAPL MSFT], timeframe: "1Day", start: Date.new(2025, 1, 1), adjustment: :all)
-bars.each { |bar| puts "#{bar.symbol} #{bar.timestamp} #{bar.close}" }   # pages on demand
-bars.to_h          # => {"AAPL" => [Bar, …], "MSFT" => [Bar, …]} (fetches every page)
-bars.first(100)    # stops after 100 records
-
-data.stocks.trades("AAPL", start: Time.now - 3600)
-data.stocks.quotes("AAPL", start: Time.now - 60)
-data.stocks.auctions(%w[AAPL], start: Date.today - 5)
-
-# Latest values and snapshots: a String returns one record, an Array returns a Hash
-data.stocks.latest_quotes("AAPL")              # => Alpaca::MarketData::Quote
-data.stocks.latest_trades(%w[AAPL MSFT])       # => {"AAPL" => Trade, "MSFT" => Trade}
-data.stocks.snapshots("AAPL").daily_bar.close
-
-# Crypto (loc: defaults to "us") and options
-data.crypto.bars("BTC/USD", timeframe: "1Min").first(60)
-data.crypto.latest_orderbooks(%w[BTC/USD])
-data.options.chain("AAPL", type: :call, strike_price_gte: 150).each { |s| puts "#{s.symbol} #{s.greeks&.delta} #{s.implied_volatility}" }
-data.options.bars(%w[AAPL270115C00190000], timeframe: "1Hour")
-
-# News, corporate actions, screeners, fixed income, logos
-data.news(symbols: %w[AAPL], include_content: true).first(20)
-data.corporate_actions(symbols: %w[AAPL], types: %w[cash_dividend])
-data.corporate_action_events(since: Time.now - 86_400).each { |event| ... }   # SSE
-data.screener.most_actives(by: :volume, top: 20)
-data.screener.movers(:stocks, top: 10)
-data.fixed_income.latest_prices(%w[US912797KJ59])
-data.logo("AAPL")   # PNG bytes
+Alpaca::Streaming::MarketData.crypto.on_orderbook("BTC/USD") { |book| ... }
+Alpaca::Streaming::MarketData.options(feed: :opra).on_quote("AAPL270115C00190000") { |q| ... }  # needs msgpack
+Alpaca::Streaming::MarketData.news.on_news("*") { |article| puts article.headline }
+Alpaca::Streaming::MarketData.test.on_trade("FAKEPACA") { |t| ... }   # always-on test feed
 ```
 
-Records expose readable names (`timestamp`, `open`, `close`, `vwap`, `bid_price`, `daily_bar`, …);
-the raw short keys still work (`bar[:c]`). Prices and other non-integer numbers are `BigDecimal`.
+Stream records are the same classes the REST API returns (`Alpaca::MarketData::Trade`, `Bar`, …).
 
 Handlers run on the stream's reader, so keep them quick or hand work off to a queue.
 
@@ -342,6 +321,12 @@ bundle exec rspec                    # offline; WebMock + fixtures from Alpaca's
 bundle exec standardrb
 bundle exec rake openapi:coverage    # documented operations vs implemented
 bundle exec rake openapi:update      # refresh openapi/*.json from Alpaca, then review the diff
+
+# Opt-in live checks against paper (Trading), sandbox (Broker) and free-tier Market Data.
+# They place and cancel a $1 limit order and create and delete a watchlist on the paper account.
+APCA_API_KEY_ID=... APCA_API_SECRET_KEY=... \
+APCA_BROKER_CLIENT_ID=... APCA_BROKER_CLIENT_SECRET=... \
+ALPACA_LIVE=1 bundle exec rspec spec/live
 ```
 
 Each request in the test suite is checked against the vendored OpenAPI specs (path, verb, query

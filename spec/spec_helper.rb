@@ -13,6 +13,10 @@ require "webmock/rspec"
 
 Dir[File.join(__dir__, "support", "**", "*.rb")].sort.each { |file| require file }
 
+ALPACA_ENV = %w[APCA_API_KEY_ID APCA_API_SECRET_KEY ALPACA_API_KEY_ID ALPACA_API_SECRET_KEY APCA_API_OAUTH_TOKEN
+  APCA_API_BASE_URL APCA_BROKER_CLIENT_ID APCA_BROKER_CLIENT_SECRET APCA_BROKER_API_KEY_ID
+  APCA_BROKER_API_SECRET_KEY APCA_BROKER_SANDBOX APCA_DATA_FEED].freeze
+
 RSpec.configure do |config|
   config.example_status_persistence_file_path = ".rspec_status"
   config.disable_monkey_patching!
@@ -25,12 +29,31 @@ RSpec.configure do |config|
 
   config.include ApiHelpers
 
-  config.before do
+  # spec/live calls Alpaca's paper and sandbox environments; opt in with ALPACA_LIVE=1.
+  config.define_derived_metadata(file_path: %r{/spec/live/}) { |metadata| metadata[:live] = true }
+  config.filter_run_excluding :live unless ENV["ALPACA_LIVE"]
+  config.include LiveHelpers, :live
+
+  config.around do |example|
+    saved = ENV.to_h.slice(*ALPACA_ENV)
+    ALPACA_ENV.each { |name| ENV.delete(name) } unless example.metadata[:live]
     Alpaca.reset!
-    %w[APCA_API_KEY_ID APCA_API_SECRET_KEY ALPACA_API_KEY_ID ALPACA_API_SECRET_KEY APCA_API_OAUTH_TOKEN
-      APCA_API_BASE_URL APCA_BROKER_CLIENT_ID APCA_BROKER_CLIENT_SECRET APCA_BROKER_API_KEY_ID
-      APCA_BROKER_API_SECRET_KEY APCA_BROKER_SANDBOX APCA_DATA_FEED].each { |name| ENV.delete(name) }
     # Retries sleep; keep the suite fast unless a spec opts back in.
-    Alpaca.configuration.max_retries = 0
+    Alpaca.configuration.max_retries = 0 unless example.metadata[:live]
+    example.run
+  ensure
+    ALPACA_ENV.each { |name| ENV.delete(name) }
+    ENV.update(saved)
+  end
+
+  config.around(:each, :live) do |example|
+    WebMock.allow_net_connect!
+    # WebMock's async-http adapter (loaded with alpaca/streaming) can't carry real WebSockets.
+    async_adapter = defined?(WebMock::HttpLibAdapters::AsyncHttpClientAdapter) && WebMock::HttpLibAdapters::AsyncHttpClientAdapter
+    async_adapter&.disable!
+    example.run
+  ensure
+    async_adapter&.enable!
+    WebMock.disable_net_connect!
   end
 end
