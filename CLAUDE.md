@@ -3,8 +3,8 @@
 Ruby client for the Alpaca APIs (Trading, Broker, Market Data, plus WebSocket/SSE streaming).
 Gem name: `alpaca-trade-api`, required as `require "alpaca"`. Maintainer: Cloves Carneiro Jr.
 
-**Status:** 2.0 rewrite implemented on the `v2` branch (all 263 documented REST/SSE operations
-covered; 4 legacy ones skipped on purpose). Backwards compatibility with 0.x is NOT
+**Status:** 2.0 rewrite merged to `master` (PR #36; all 263 documented REST/SSE operations
+covered, 4 legacy ones skipped on purpose); `2.0.0.alpha1` not yet released. Backwards compatibility with 0.x is NOT
 a goal. Design and milestones: `docs/v2-proposal.md`.
 
 ## Commands
@@ -16,6 +16,7 @@ bundle exec standardrb [--fix]          # lint (StandardRB, ruby_version 3.3)
 bundle exec rake openapi:coverage       # documented operations vs implemented ones
 bundle exec rake openapi:update         # refresh openapi/*.json from Alpaca, then git diff
 bundle exec rake                        # spec + standard + openapi:coverage
+ALPACA_LIVE=1 bundle exec rspec spec/live  # opt-in live checks (paper/sandbox; needs real keys)
 ```
 
 Ruby: develop on `.ruby-version` (4.0.x); must support >= 3.3 (rbenv has 3.3.6 and 3.4.x).
@@ -125,6 +126,10 @@ specs — read `websocket-streaming.md` (trade_updates), `streaming-market-data.
 
 - RSpec + WebMock only (no VCR, no live calls in the default suite). Fixtures come from the
   OpenAPI examples where possible. Never commit real keys, account numbers or payloads.
+- `spec/live` (tagged `:live`, excluded unless `ALPACA_LIVE=1`) hits paper/sandbox/free data with
+  the real env credentials; each group skips when its keys are missing. Clients are pinned to
+  `paper: true` / `sandbox: true`. Live examples keep the env and allow net connections; every
+  example restores the `APCA_*` env it started with. The OpenAPI contract check also runs on them.
 - `max_retries` is forced to 0 in specs; retry specs opt back in and stub `sleep`.
 - WebSocket specs use `spec/support/fake_transport.rb` (scripted frames; `FakeTransport::Raw`
   for exact payload/binary frames). `spec/alpaca/streaming/async_transport_spec.rb` runs a real
@@ -140,4 +145,4 @@ specs — read `websocket-streaming.md` (trade_updates), `streaming-market-data.
 - Runtime deps: faraday, faraday-retry, bigdecimal only. Streaming deps (async-websocket,
   msgpack) are optional and must only be required by `require "alpaca/streaming"`.
 - Update `CHANGELOG.md` (Keep a Changelog format) with every user-visible change.
-- Git: work on `v2`; commit only when asked.
+- Git: `master` is the default branch; work on feature branches and commit only when asked.
