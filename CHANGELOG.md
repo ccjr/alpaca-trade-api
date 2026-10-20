@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] - Unreleased
 A ground-up rewrite. 2.0 is **not** backwards compatible with 0.x; see `docs/v2-proposal.md`.
 
+### Fixed
+- Prevent HTTP retries from replaying server-sent event streams after data has already been delivered.
+- Honor custom Faraday adapters for API and Broker AuthX token requests, including configured timeouts and logging.
+- Lazily paginate Broker transfer and instant-funding lists, and cache market-data clients independently by feed.
+- Reject malformed option symbols and invalid option-symbol components before formatting them.
+
 ### Added
 - `require "alpaca"` with three clients: `Alpaca::Trading::Client`, `Alpaca::Broker::Client` and
   `Alpaca::MarketData::Client` (plus `Alpaca.trading`, `Alpaca.broker`, `Alpaca.market_data`).

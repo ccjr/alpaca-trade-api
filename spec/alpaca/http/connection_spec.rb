@@ -175,6 +175,32 @@ RSpec.describe Alpaca::HTTP::Connection do
       expect(parse.call((Time.now + 5).httpdate)).to be_within(2).of(5)
       expect(parse.call("garbage")).to be_nil
     end
+
+    it "does not retry a stream after yielding partial data" do
+      adapter = Class.new(Faraday::Adapter) do
+        class << self
+          attr_accessor :calls
+        end
+        self.calls = 0
+
+        def call(env)
+          super
+          self.class.calls += 1
+          env.status = 200
+          chunk = "data: {\"event_id\":\"01A\"}\n\n"
+          env.request.on_data.call(chunk, chunk.bytesize, env)
+          raise Faraday::TimeoutError, "late timeout"
+        end
+      end
+      Faraday::Adapter.register_middleware alpaca_partial_timeout: adapter
+      config.adapter = :alpaca_partial_timeout
+      chunks = []
+
+      expect { connection.stream("/v2/events/trades") { |chunk| chunks << chunk } }
+        .to raise_error(Alpaca::TimeoutError, /late timeout/)
+      expect(adapter.calls).to eq(1)
+      expect(chunks.size).to eq(1)
+    end
   end
 
   it "re-authenticates once on 401 with refreshable auth" do
@@ -222,5 +248,17 @@ RSpec.describe Alpaca::HTTP::Connection do
     conn.request(:get, "v2/orders")
     expect(seen).to eq(["request.faraday"])
     expect(conn.inspect).to include("paper-api")
+  end
+
+  it "honors a Faraday adapter selected in the customization block" do
+    stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+      stub.get("/v2/orders") { [200, {"Content-Type" => "application/json"}, "[]"] }
+    end
+    conn = described_class.new(base_url: "https://example.test", auth: auth, config: config) do |f|
+      f.adapter :test, stubs
+    end
+
+    expect(conn.request(:get, "/v2/orders").data).to eq([])
+    stubs.verify_stubbed_calls
   end
 end

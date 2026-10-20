@@ -124,6 +124,9 @@ RSpec.describe Alpaca::Broker::Client do
     it "builds a Market Data client sharing its credentials" do
       data = client.market_data
       expect(data).to equal(client.market_data)
+      expect(client.market_data(feed: :iex)).to equal(client.market_data(feed: :iex))
+      expect(client.market_data(feed: :sip)).not_to equal(client.market_data(feed: :iex))
+      expect(client.market_data(feed: :sip).feed).to eq(:sip)
       expect(data).to be_sandbox
       stub = stub_json(:get, "https://data.sandbox.alpaca.markets/v1beta1/news", {"news" => [], "next_page_token" => nil})
         .with(headers: {"Authorization" => "Basic azpz"})

@@ -94,7 +94,8 @@ module Alpaca
 
         # client_assertion: a String or a callable returning a freshly signed JWT
         # (private_key_jwt), used instead of client_secret.
-        def initialize(client_id:, token_url:, client_secret: nil, client_assertion: nil, connection: nil)
+        def initialize(client_id:, token_url:, client_secret: nil, client_assertion: nil, connection: nil,
+          config: Alpaca.configuration, &faraday)
           raise ConfigurationError, "client_id is required" if client_id.nil? || client_id.to_s.empty?
           if client_secret.nil? && client_assertion.nil?
             raise ConfigurationError, "client_secret or client_assertion is required"
@@ -104,7 +105,7 @@ module Alpaca
           @client_secret = client_secret
           @client_assertion = client_assertion
           @token_url = token_url
-          @connection = connection || Faraday.new { |f| f.request :url_encoded }
+          @connection = connection || build_connection(config, faraday)
           @mutex = Mutex.new
           @token = nil
           @expires_at = nil
@@ -132,6 +133,32 @@ module Alpaca
         def inspect = "#<#{self.class.name} client_id=#{@client_id.inspect}>"
 
         private
+
+        def build_connection(config, customize)
+          Faraday.new(
+            headers: {"User-Agent" => config.user_agent, "Accept" => "application/json"},
+            request: {timeout: config.timeout, open_timeout: config.open_timeout}
+          ) do |f|
+            f.request :url_encoded
+            if config.max_retries.to_i.positive?
+              # Issuing another client-credentials token has no financial side
+              # effects, so transient failures are safe to retry.
+              f.request :retry,
+                max: config.max_retries,
+                interval: 0.5,
+                interval_randomness: 0.5,
+                backoff_factor: 2,
+                max_interval: config.max_retry_interval,
+                methods: [:post],
+                retry_statuses: Connection::RETRY_STATUSES,
+                exceptions: Connection::RETRY_EXCEPTIONS
+            end
+            f.response :logger, config.logger, headers: false, bodies: false, log_level: :debug if config.logger
+            adapter = defined?(Faraday::Adapter::NetHttpPersistent) ? :net_http_persistent : Faraday.default_adapter
+            f.adapter(config.adapter || adapter)
+            customize&.call(f)
+          end
+        end
 
         def fetch!
           raw = @connection.post(@token_url, form)
