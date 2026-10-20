@@ -100,6 +100,25 @@ module Alpaca
       end
     end
 
+    # Pages addressed by an integer offset. The initial offset supplied by the
+    # caller is preserved and subsequent requests advance by the actual number
+    # of records returned.
+    def paginate_by_offset(path, model:, query:, size: 100)
+      query = {"limit" => size}.merge(query.transform_keys(&:to_s))
+      page_size = query["limit"].to_i
+      initial_offset = query.fetch("offset", 0).to_i
+      raise ArgumentError, "limit must be positive" unless page_size.positive?
+
+      Collection.new do |cursor|
+        params = cursor.nil? ? query : query.merge("offset" => cursor)
+        response = connection.request(:get, path, query: params)
+        items = model.build(response.data, response: response) || []
+        current_offset = cursor.nil? ? initial_offset : cursor
+        next_cursor = (items.size < page_size) ? nil : current_offset + items.size
+        Collection::Page.new(items: items, next_cursor: next_cursor, response: response)
+      end
+    end
+
     def require_broker!(method)
       raise Error, "#{method} is only available through Alpaca::Broker::Client#trading(account_id)" unless broker?
     end

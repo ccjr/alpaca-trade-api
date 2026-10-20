@@ -19,7 +19,7 @@ module Alpaca
       def initialize(client_id: nil, client_secret: nil, client_assertion: nil, key_id: nil, secret_key: nil,
         sandbox: nil, base_url: nil, token_url: nil, config: Alpaca.configuration, &faraday)
         @sandbox = sandbox.nil? ? config.broker_sandbox : sandbox
-        auth = build_auth(client_id, client_secret, client_assertion, key_id, secret_key, token_url, config)
+        auth = build_auth(client_id, client_secret, client_assertion, key_id, secret_key, token_url, config, faraday)
         super(base_url: base_url || (@sandbox ? SANDBOX_URL : LIVE_URL), auth: auth, config: config, &faraday)
       end
 
@@ -28,7 +28,9 @@ module Alpaca
       # Market Data client authenticated with this Broker client's credentials
       # (data.sandbox.alpaca.markets in sandbox).
       def market_data(feed: nil)
-        @market_data ||= MarketData::Client.new(auth: connection.auth, sandbox: sandbox?, feed: feed, config: config)
+        resolved_feed = feed || config.data_feed
+        (@market_data ||= {})[resolved_feed] ||=
+          MarketData::Client.new(auth: connection.auth, sandbox: sandbox?, feed: resolved_feed, config: config)
       end
 
       # Trading on behalf of one account: orders, positions, watchlists, account,
@@ -115,7 +117,7 @@ module Alpaca
 
       def path_for(account_id) = "/v1/accounts/#{HTTP::Params.segment(account_id)}"
 
-      def build_auth(client_id, client_secret, client_assertion, key_id, secret_key, token_url, config)
+      def build_auth(client_id, client_secret, client_assertion, key_id, secret_key, token_url, config, faraday)
         if key_id || secret_key || (config.broker_client_id.nil? && client_id.nil? && config.broker_key_id)
           return HTTP::Auth::Basic.new(key_id || config.broker_key_id, secret_key || config.broker_secret_key)
         end
@@ -124,7 +126,9 @@ module Alpaca
           client_id: client_id || config.broker_client_id,
           client_secret: client_secret || (client_assertion ? nil : config.broker_client_secret),
           client_assertion: client_assertion,
-          token_url: token_url || (@sandbox ? SANDBOX_TOKEN_URL : LIVE_TOKEN_URL)
+          token_url: token_url || (@sandbox ? SANDBOX_TOKEN_URL : LIVE_TOKEN_URL),
+          config: config,
+          &faraday
         )
       end
     end

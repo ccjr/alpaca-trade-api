@@ -53,13 +53,24 @@ RSpec.describe "Broker funding" do
     expect(created).to have_attributes(amount: BigDecimal(500), direction: :INCOMING, type: :ach)
 
     stub_json(:get, "#{accounts_url}/transfers", [transfer], query: {"direction" => "INCOMING", "limit" => "10"})
-    expect(client.transfers.list(account_id, direction: :INCOMING, limit: 10).size).to eq(1)
+    expect(client.transfers.list(account_id, direction: :INCOMING, limit: 10).to_a.size).to eq(1)
 
     stub_request(:delete, "#{accounts_url}/transfers/t1").to_return(status: 200)
     expect(client.transfers.cancel(account_id, "t1")).to be(true)
 
-    stub_json(:get, "#{accounts_url}/transfers", nil)
-    expect(client.transfers.list(account_id)).to eq([])
+    stub_json(:get, "#{accounts_url}/transfers", nil, query: {"limit" => "100"})
+    expect(client.transfers.list(account_id).to_a).to eq([])
+  end
+
+  it "paginates offset-based transfer lists" do
+    transfer = {"type" => "ach", "status" => "QUEUED", "amount" => "10", "direction" => "INCOMING"}
+    stub_json(:get, "#{accounts_url}/transfers", [transfer.merge("id" => "t1"), transfer.merge("id" => "t2")],
+      query: {"limit" => "2"})
+    stub_json(:get, "#{accounts_url}/transfers", [transfer.merge("id" => "t3")],
+      query: {"limit" => "2", "offset" => "2"})
+
+    expect(client.transfers.list(account_id, limit: 2).map(&:id)).to eq(%w[t1 t2 t3])
+    expect { client.transfers.list(account_id, limit: 0) }.to raise_error(ArgumentError, "limit must be positive")
   end
 
   describe "journals" do
@@ -116,7 +127,7 @@ RSpec.describe "Broker funding" do
     let(:settlement) { {"id" => "s1", "status" => "PENDING", "total_amount" => "100"} }
 
     it "creates, lists, finds and cancels" do
-      stub_json(:get, base, [funding], query: {"status" => "PENDING"})
+      stub_json(:get, base, [funding], query: {"status" => "PENDING", "limit" => "100"})
       expect(client.instant_funding.list(status: :PENDING).first.deadline).to eq(Date.new(2026, 10, 21))
 
       stub_json(:get, "#{base}/if1", funding)
@@ -128,8 +139,8 @@ RSpec.describe "Broker funding" do
       stub_request(:delete, "#{base}/if1").to_return(status: 204)
       expect(client.instant_funding.cancel("if1")).to be(true)
 
-      stub_json(:get, base, nil)
-      expect(client.instant_funding.list).to eq([])
+      stub_json(:get, base, nil, query: {"limit" => "100"})
+      expect(client.instant_funding.list.to_a).to eq([])
     end
 
     it "reads limits and reports" do

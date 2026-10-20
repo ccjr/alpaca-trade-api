@@ -65,6 +65,10 @@ module Alpaca
           auth.apply(req.headers)
           req.headers["Accept"] = "text/event-stream"
           req.options.read_timeout = @config.stream_timeout
+          # EventStream owns reconnection because it can resume from the last
+          # event id. Retrying here would repeat the original request after
+          # chunks have already been yielded and deliver duplicate events.
+          req.options.context = (req.options.context || {}).merge(alpaca_stream: true)
           req.options.on_data = proc do |chunk, _bytes, env|
             status ||= env&.status
             (status.nil? || status.between?(200, 299)) ? on_chunk.call(chunk) : error_body << chunk
@@ -107,8 +111,8 @@ module Alpaca
         ) do |f|
           f.request :retry, retry_options if @config.max_retries.to_i.positive?
           f.response :logger, @config.logger, headers: false, bodies: false, log_level: :debug if @config.logger
+          f.adapter(@config.adapter || preferred_adapter)
           customize&.call(f)
-          f.adapter(@config.adapter || Faraday.default_adapter)
         end
       end
 
@@ -119,12 +123,18 @@ module Alpaca
           interval_randomness: 0.5,
           backoff_factor: 2,
           max_interval: @config.max_retry_interval,
-          methods: IDEMPOTENT_METHODS,
+          # Use retry_if for every method so streaming GETs can opt out after
+          # they have started yielding data.
+          methods: [],
           retry_statuses: RETRY_STATUSES,
           exceptions: RETRY_EXCEPTIONS,
           # Non-idempotent requests are retried only when nothing could have been
           # applied (429) or the server de-duplicates them (Idempotency-Key).
-          retry_if: ->(env, _exception) { env.status == 429 || env.request_headers.key?("Idempotency-Key") },
+          retry_if: lambda { |env, _exception|
+            !env.request.context&.[](:alpaca_stream) &&
+              (IDEMPOTENT_METHODS.include?(env.method) || env.status == 429 ||
+                env.request_headers.key?("Idempotency-Key"))
+          },
           rate_limit_reset_header: "X-RateLimit-Reset",
           header_parser_block: method(:seconds_until)
         }
@@ -142,6 +152,10 @@ module Alpaca
         end
       rescue ArgumentError
         nil
+      end
+
+      def preferred_adapter
+        defined?(Faraday::Adapter::NetHttpPersistent) ? :net_http_persistent : Faraday.default_adapter
       end
     end
   end

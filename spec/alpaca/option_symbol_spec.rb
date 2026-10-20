@@ -20,9 +20,19 @@ RSpec.describe Alpaca::OptionSymbol do
 
   it "validates" do
     expect(described_class.valid?("AAPL270115C00190000")).to be(true)
+    expect(described_class.valid?(" aapl 270115c00190000 ")).to be(true)
     expect(described_class.valid?("AAPL")).to be(false)
+    expect(described_class.valid?("AAPL991332C00100000")).to be(false)
     expect { described_class.parse("AAPL") }.to raise_error(ArgumentError, /invalid OCC/)
     expect { described_class.new(root: "A", expiration: Date.today, type: :straddle, strike: 1) }
       .to raise_error(ArgumentError, /call or :put/)
+    expect { described_class.build("TOOLONG", expiration: Date.new(2027, 1, 15), type: :call, strike: 1) }
+      .to raise_error(ArgumentError, /root/)
+    expect { described_class.build("AAPL", expiration: Date.new(1999, 1, 15), type: :call, strike: 1) }
+      .to raise_error(ArgumentError, /expiration/)
+    expect { described_class.build("AAPL", expiration: Date.new(2027, 1, 15), type: :call, strike: "1.0001") }
+      .to raise_error(ArgumentError, /strike/)
+    expect { described_class.build("AAPL", expiration: Date.new(2027, 1, 15), type: :call, strike: -1) }
+      .to raise_error(ArgumentError, /strike/)
   end
 end

@@ -47,7 +47,7 @@ module Alpaca
       # Filters: direction (:INCOMING, :OUTGOING), limit, offset.
       operation broker: "getTransfersForAccount"
       def list(account_id, **params)
-        http_get(path("/v1/accounts", account_id, "transfers"), query: params, model: Transfer) || []
+        paginate_by_offset(path("/v1/accounts", account_id, "transfers"), model: Transfer, query: params)
       end
 
       #   transfers.create(account_id, transfer_type: :ach, relationship_id: rel.id, amount: "500", direction: :INCOMING)
@@ -111,7 +111,7 @@ module Alpaca
       # Filters: status, system_date, deadline, before, sort_by, sort_order, limit, offset.
       operation broker: "get-v1-instant-funding-list"
       def list(**params)
-        http_get("/v1/instant_funding", query: params, model: Alpaca::InstantFunding) || []
+        paginate_by_offset("/v1/instant_funding", model: Alpaca::InstantFunding, query: params)
       end
 
       operation broker: "get-v1-instant-funding-single"

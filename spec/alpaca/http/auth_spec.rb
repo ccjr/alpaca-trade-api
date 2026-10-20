@@ -104,6 +104,31 @@ RSpec.describe Alpaca::HTTP::Auth do
       expect { auth.token }.to raise_error(Alpaca::ConnectionError, /down/)
     end
 
+    it "applies client HTTP configuration to token requests" do
+      config = Alpaca::Configuration.new.tap do |c|
+        c.timeout = 1
+        c.open_timeout = 2
+        c.max_retries = 0
+        c.user_agent = "configured-agent"
+      end
+      seen = nil
+      stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+        stub.post(token_url) do |env|
+          seen = env
+          [200, {"Content-Type" => "application/json"}, '{"access_token":"t","expires_in":900}']
+        end
+      end
+      auth = described_class.new(client_id: "cid", client_secret: "cs", token_url: token_url, config: config) do |f|
+        f.adapter :test, stubs
+      end
+
+      expect(auth.token).to eq("t")
+      expect(seen.request_headers["User-Agent"]).to eq("configured-agent")
+      expect(seen.request.timeout).to eq(1)
+      expect(seen.request.open_timeout).to eq(2)
+      stubs.verify_stubbed_calls
+    end
+
     it "validates configuration" do
       expect { described_class.new(client_id: nil, client_secret: "x", token_url: token_url) }
         .to raise_error(Alpaca::ConfigurationError)
