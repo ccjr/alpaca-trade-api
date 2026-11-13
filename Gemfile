@@ -11,4 +11,4 @@ gem "debug", require: false
 
 # Optional runtime dependencies, used by `require "alpaca/streaming"`.
 gem "async-websocket", "~> 0.30", require: false
-gem "msgpack", "~> 1.7", require: false
+gem "msgpack", "~> 1.8", require: false
